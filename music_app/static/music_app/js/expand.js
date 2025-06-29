@@ -4,9 +4,8 @@ function toggleAlbum(index) {
 
   allCards.forEach((card, i) => {
     const isCurrent = i === index;
-    const isAlreadyExpanded = card.classList.contains('expanded');
 
-    if (isCurrent && !isAlreadyExpanded) {
+    if (isCurrent) {
       card.classList.remove('compact');
       card.classList.add('expanded');
       allExpanded[i].classList.remove('hidden');
@@ -17,12 +16,12 @@ function toggleAlbum(index) {
     }
   });
 
-  // Прокрутка к текущей карточке (если она развёрнута)
   const currentCard = allCards[index];
-  if (currentCard.classList.contains('expanded')) {
+  if (currentCard) {
     currentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
+
 
 
 

@@ -28,21 +28,23 @@
 <main>
     <div class="album-list">
         {% for album in albums %}
-        <div class="album-card compact" data-index="{{ forloop.counter0 }}" onclick="toggleAlbum(this)">
-            <img src="{{ album.cover_url }}" alt="Обложка альбома" class="album-cover">
-            <div class="album-info">
-                <h2>{{ album.title }}</h2>
-                <p>{{ album.artist }}</p>
+            <div class="album-card compact" onclick="toggleAlbum({{ forloop.counter0 }})">
+                <img src="{{ album.cover_url }}" alt="Обложка альбома" class="album-cover">
+                <div class="album-info">
+                    <h2>{{ album.title }}</h2>
+                    <p>{{ album.artist }}</p>
+                </div>
             </div>
             <div class="album-expanded hidden">
                 <p class="album-description">{{ album.description }}</p>
                 <ul class="tracklist">
                     {% for track in album.tracks %}
-                    <li>{{ track }}</li>
+                    <li onclick="playTrack('{{ track }}', '{{ album.artist }}', '{{ track }}.mp3', '{{ album.cover_url }}')">
+                        {{ track }}
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
-        </div>
         {% endfor %}
     </div>
 </main>
@@ -51,6 +53,7 @@
 <script src="{% static 'music_app/js/player.js' %}"></script>
 </body>
 </html>
+
 
 
 

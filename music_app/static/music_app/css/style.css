@@ -113,59 +113,44 @@ a:hover {
 
 /* Компактная карточка */
 .album-card.compact {
-  height: 60px;
-  padding: 8px 16px;
+  height: 150px; /* было 60px */
+  padding: 20px 32px; /* увеличено */
 }
 
 .album-card.compact img.album-cover {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  object-fit: cover;
-  margin-right: 16px;
-}
-
-.album-card.compact .album-info {
-  display: flex;
-  flex-direction: column;
+  width: 125px;  /* было 50px */
+  height: 125px;
+  margin-right: 24px;
 }
 
 .album-card.compact .album-info h2 {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 24px;  /* было 16px */
 }
 
 .album-card.compact .album-info p {
-  font-size: 14px;
-  color: #888;
+  font-size: 18px;  /* было 14px */
 }
+
 
 /* Расширенная карточка */
 .album-card.expanded {
-  flex-direction: column;
-  padding: 20px;
+  padding: 40px;
 }
 
 .album-card.expanded img.album-cover {
-  width: 180px;
-  height: 180px;
-  margin-bottom: 16px;
-  border-radius: 12px;
-}
-
-.album-card.expanded .album-info {
-  text-align: center;
+  width: 300px;  /* было 180px */
+  height: 300px;
+  margin-bottom: 24px;
 }
 
 .album-card.expanded .album-info h2 {
-  font-size: 22px;
-  margin-bottom: 8px;
+  font-size: 32px;  /* было 22px */
 }
 
 .album-card.expanded .album-info p {
-  font-size: 16px;
-  color: #bbb;
+  font-size: 20px;
 }
+
 
 .album-expanded {
   margin-top: 12px;

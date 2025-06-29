@@ -1,34 +1,21 @@
-let audio = new Audio();
-let currentIndex = 0;
-let trackList = [];
-
-function playTrack(url, title, artist, cover) {
-    audio.src = url;
-    audio.play();
-
-    document.getElementById("player").style.display = "flex";
-    document.getElementById("player-title").textContent = title;
-    document.getElementById("player-artist").textContent = artist;
-    document.getElementById("player-cover").src = cover;
+function toggleAlbum(index) {
+  const details = document.getElementById(`album-details-${index}`);
+  details.classList.toggle('hidden');
 }
 
-function stopTrack() {
-    audio.pause();
-    audio.currentTime = 0;
+function playTrack(title, artist, url, cover) {
+  document.getElementById("player-title").innerText = title;
+  document.getElementById("player-artist").innerText = artist;
+  document.getElementById("player-cover").src = cover;
+  const audio = document.getElementById("audio");
+  audio.src = url;
+  document.getElementById("player").classList.remove("hidden");
+  audio.play();
 }
 
-function nextTrack() {
-    if (currentIndex < trackList.length - 1) {
-        currentIndex++;
-        const track = trackList[currentIndex];
-        playTrack(track.url, track.title, track.artist, track.cover);
-    }
+function closePlayer() {
+  const audio = document.getElementById("audio");
+  audio.pause();
+  document.getElementById("player").classList.add("hidden");
 }
 
-function prevTrack() {
-    if (currentIndex > 0) {
-        currentIndex--;
-        const track = trackList[currentIndex];
-        playTrack(track.url, track.title, track.artist, track.cover);
-    }
-}

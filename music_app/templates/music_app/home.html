@@ -1,47 +1,41 @@
-{% extends 'base.html' %}
 {% load static %}
-
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="album-container">
-    <div class="album-cover">
-        <img src="{% static 'music_app/images/Selected_Ambient_Works_85-92.jpg' %}" alt="Album Cover">
+<div class="album-list">
+  {% for album in albums %}
+    <div class="album-card" onclick="toggleAlbum('{{ forloop.counter0 }}')">
+      <img src="{% static album.cover %}" alt="{{ album.title }} cover" class="album-cover">
+      <div class="album-info">
+        <h2>{{ album.title }}</h2>
+        <p>{{ album.artist }}</p>
+      </div>
     </div>
 
-    <div class="album-info">
-        <h1>Selected Ambient Works 85–92</h1>
-        <h3>Aphex Twin</h3>
-        <p>Легендарный дебютный альбом Ричарда Джеймса. Сочетает эмбиент с техно в минималистичной эстетике начала 90-х. Один из важнейших релизов в истории электронной музыки.</p>
-
-        <ul class="track-list">
-            {% for track in tracks %}
-            <li onclick="playTrack('{{ track.url }}', '{{ track.title }}', '{{ track.artist }}', '{{ album_cover_url }}')">
-                <span>{{ track.title }}</span>
-                <span class="duration">{{ track.duration }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+    <div id="album-details-{{ forloop.counter0 }}" class="album-details hidden">
+      <p class="album-description">{{ album.description }}</p>
+      <ul class="tracklist">
+        {% for track in album.tracks %}
+          <li onclick="playTrack('{{ track.title }}', '{{ track.artist }}', '{% static track.url %}', '{% static album.cover %}')">
+            <span class="track-title">{{ track.title }}</span>
+            <span class="track-duration">{{ track.duration }}</span>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
+  {% endfor %}
 </div>
 
-<div class="player" id="player">
-    <img id="player-cover" src="" alt="Cover">
-    <div class="player-info">
-        <h2 id="player-title">Title</h2>
-        <p id="player-artist">Artist</p>
-    </div>
-    <div class="player-controls">
-        <button onclick="prevTrack()">
-            <img src="{% static 'music_app/images/back.jpg' %}" alt="Back">
-        </button>
-        <button onclick="stopTrack()">
-            <img src="{% static 'music_app/images/stop.jpg' %}" alt="Stop">
-        </button>
-        <button onclick="nextTrack()">
-            <img src="{% static 'music_app/images/forward.jpg' %}" alt="Forward">
-        </button>
-    </div>
+<div id="player" class="music-player hidden">
+  <img id="player-cover" src="" class="player-cover" alt="cover">
+  <div class="player-info">
+    <h3 id="player-title">Title</h3>
+    <p id="player-artist">Artist</p>
+  </div>
+  <audio id="audio" controls autoplay></audio>
+  <button onclick="closePlayer()">Close</button>
 </div>
 
 <script src="{% static 'music_app/js/player.js' %}"></script>
 {% endblock %}
+

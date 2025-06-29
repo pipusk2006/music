@@ -93,3 +93,82 @@ a:hover {
     background-color: #1db954; /* акцент, как в Spotify */
     color: #fff;
 }
+
+.album-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 2rem;
+}
+
+.album-card {
+  background-color: #121212;
+  border-radius: 1.5rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.album-card:hover {
+  background-color: #1a1a1a;
+}
+.album-cover {
+  width: 80px;
+  height: 80px;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+.album-info h2, .album-info p {
+  margin: 0;
+  color: white;
+}
+.album-info p {
+  color: #aaa;
+}
+.album-details {
+  padding-left: 100px;
+}
+.album-description {
+  color: #ccc;
+}
+.tracklist {
+  list-style: none;
+  padding: 0;
+}
+.tracklist li {
+  padding: 0.5rem 0;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.tracklist li:hover {
+  color: #1db954;
+}
+.hidden {
+  display: none;
+}
+
+.music-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #121212;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+}
+.player-cover {
+  height: 64px;
+  border-radius: 1rem;
+}
+.player-info {
+  flex-grow: 1;
+  color: white;
+}
+

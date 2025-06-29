@@ -83,12 +83,13 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('postgresql://postgres:RXRCRXcBfvOpLqGcmHfSGSoefMsdPUJa@mainline.proxy.rlwy.net:20010/railway'),
+    'default': dj_database_url.parse(
+        'postgresql://postgres:RXRCRXcBfvOpLqGcmHfSGSoefMsdPUJa@mainline.proxy.rlwy.net:20010/railway',
         conn_max_age=600,
         ssl_require=True
     )
 }
+
 
 
 

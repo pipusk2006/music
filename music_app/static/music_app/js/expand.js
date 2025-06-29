@@ -5,21 +5,21 @@ function toggleAlbum(index) {
   const allDetails = document.querySelectorAll('.album-details');
 
   allCards.forEach((card, i) => {
-    if (i == index) {
-      card.classList.toggle('expanded');
-    } else {
-      card.classList.remove('expanded');
-    }
+    const detail = allDetails[i];
+    const isCurrent = i == index;
+    
+    card.classList.toggle('expanded', isCurrent);
+    detail.classList.toggle('hidden', !isCurrent);
   });
 
-  allDetails.forEach((detail, i) => {
-    if (i == index) {
-      detail.classList.toggle('hidden');
-    } else {
-      detail.classList.add('hidden');
-    }
-  });
-}
+  // Scroll to the expanded album
+  const expanded = document.querySelector('.album-card.expanded');
+  if (expanded) {
+    expanded.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+} 
+
+
 
 
 

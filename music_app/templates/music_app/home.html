@@ -5,22 +5,29 @@
 <div class="album-list">
   {% for album in albums %}
     <div class="album-card" onclick="toggleAlbum('{{ forloop.counter0 }}')">
-      <img src="{% static album.cover %}" alt="{{ album.title }} cover" class="album-cover">
-      <div class="album-info">
-        <h2>{{ album.title }}</h2>
-        <p>{{ album.artist }}</p>
+      <div class="album-preview">
+        <img src="{% static album.cover %}" alt="{{ album.title }} cover" class="album-cover">
+        <div class="album-info">
+          <h2>{{ album.title }}</h2>
+          <p>{{ album.artist }}</p>
+        </div>
       </div>
 
-      <div id="album-details-{{ forloop.counter0 }}" class="album-details hidden">
-        <p class="album-description">{{ album.description }}</p>
-        <ul class="tracklist">
-          {% for track in album.tracks %}
-            <li onclick="playTrack('{{ track.title }}', '{{ track.artist }}', '{% static track.url %}', '{% static album.cover %}')">
-              <span class="track-title">{{ track.title }}</span>
-              <span class="track-duration">{{ track.duration }}</span>
-            </li>
-          {% endfor %}
-        </ul>
+      <div id="album-details-{{ forloop.counter0 }}" class="album-expanded hidden">
+        <img src="{% static album.cover %}" alt="{{ album.title }} large cover" class="album-cover-large">
+        <div class="album-meta">
+          <h2>{{ album.title }}</h2>
+          <p class="album-artist">{{ album.artist }}</p>
+          <p class="album-description">{{ album.description }}</p>
+          <ul class="tracklist">
+            {% for track in album.tracks %}
+              <li onclick="playTrack('{{ track.title }}', '{{ track.artist }}', '{% static track.url %}', '{% static album.cover %}')">
+                <span class="track-title">{{ track.title }}</span>
+                <span class="track-duration">{{ track.duration }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
   {% endfor %}
@@ -39,5 +46,6 @@
 <script src="{% static 'music_app/js/player.js' %}"></script>
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 {% endblock %}
+
 
 

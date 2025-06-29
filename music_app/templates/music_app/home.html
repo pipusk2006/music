@@ -5,7 +5,7 @@
 <div class="album-list">
   {% for album in albums %}
     <div class="album-card" onclick="toggleAlbum('{{ forloop.counter0 }}')">
-      <img src="{% static album.cover %}" alt="{{ album.title }} cover" class="album-cover">
+      <img src="{% static album.cover %}" alt="{{ album.title }} cover" class="album-cover-small">
       <div class="album-info">
         <h2>{{ album.title }}</h2>
         <p>{{ album.artist }}</p>
@@ -13,29 +13,41 @@
     </div>
 
     <div id="album-details-{{ forloop.counter0 }}" class="album-details hidden">
-      <p class="album-description">{{ album.description }}</p>
-      <ul class="tracklist">
-        {% for track in album.tracks %}
-          <li onclick="playTrack('{{ track.title }}', '{{ track.artist }}', '{% static track.url %}', '{% static album.cover %}')">
-            <span class="track-title">{{ track.title }}</span>
-            <span class="track-duration">{{ track.duration }}</span>
-          </li>
-        {% endfor %}
-      </ul>
+      <div class="album-expanded">
+        <img src="{% static album.cover %}" alt="{{ album.title }} cover" class="album-cover-large">
+        <div class="album-expanded-info">
+          <h2 class="album-title">{{ album.title }}</h2>
+          <p class="album-artist">{{ album.artist }}</p>
+          <p class="album-description-full">{{ album.description_en }}</p>
+          <ul class="tracklist">
+            {% for track in album.tracks %}
+              <li onclick="playTrack('{{ track.title }}', '{{ track.artist }}', '{% static track.url %}', '{% static album.cover %}')">
+                <span class="track-title">{{ track.title }}</span>
+                <span class="track-duration">{{ track.duration }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     </div>
   {% endfor %}
 </div>
 
 <div id="player" class="music-player hidden">
-  <img id="player-cover" src="" class="player-cover" alt="cover">
-  <div class="player-info">
-    <h3 id="player-title">Title</h3>
-    <p id="player-artist">Artist</p>
+  <div class="player-container">
+    <img id="player-cover" src="" class="player-cover" alt="cover">
+    <div class="player-info">
+      <h3 id="player-title">Title</h3>
+      <p id="player-artist">Artist</p>
+    </div>
+    <div class="player-controls">
+      <audio id="audio" controls autoplay></audio>
+    </div>
+    <button onclick="closePlayer()" class="player-close">Close</button>
   </div>
-  <audio id="audio" controls autoplay></audio>
-  <button onclick="closePlayer()">Close</button>
 </div>
 
 <script src="{% static 'music_app/js/player.js' %}"></script>
+<script src="{% static 'music_app/js/expand.js' %}"></script>
 {% endblock %}
 

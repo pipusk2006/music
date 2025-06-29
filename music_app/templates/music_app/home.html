@@ -3,31 +3,36 @@
 {% load custom_filters %}
 
 {% block content %}
-<div class="album-list">
+<div class="album-list max-w-7xl mx-auto px-4">
   {% for album in albums %}
     {% with album.title|cut:" " as clean_title %}
-    <div class="album-card" onclick="toggleAlbum('{{ forloop.counter0 }}')">
-      <div class="album-preview">
-        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} cover" class="album-cover">
-        <div class="album-info">
-          <h2>{{ album.title }}</h2>
-          <p>{{ album.artist }}</p>
+    <div class="album-card bg-gray-800 text-white rounded-lg mb-4 w-full overflow-hidden transition-all duration-300 ease-in-out" data-index="{{ forloop.counter0 }}">
+      <div class="album-preview flex items-center p-4 cursor-pointer" onclick="toggleAlbum('{{ forloop.counter0 }}')">
+        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} cover" class="album-cover w-24 h-24 object-cover rounded-md">
+        <div class="album-info ml-4">
+          <h2 class="text-xl font-bold">{{ album.title }}</h2>
         </div>
       </div>
 
       <div id="album-details-{{ forloop.counter0 }}" class="album-expanded hidden">
-        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} large cover" class="album-cover-large">
-        <div class="album-meta">
-          <h2>{{ album.title }}</h2>
-          <p class="album-artist">{{ album.artist }}</p>
-          <p class="album-description">{{ album.description }}</p>
-          <ul class="tracklist">
-            {% for track in album.tracks|split_by_comma %}
-              <li onclick="playTrack('{{ track }}', '{{ album.artist }}', '{% static 'music_app/records/' %}{{ track }}.mp3', '{% static 'music_app/images/' %}{{ clean_title }}.jpg')">
-                <span class="track-title">{{ track }}</span>
-              </li>
-            {% endfor %}
-          </ul>
+        <div class="p-6">
+          <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} large cover" class="album-cover-large w-64 h-64 object-cover rounded-lg mb-4">
+          <div class="album-meta">
+            <h2 class="text-2xl font-bold">{{ album.title }}</h2>
+            <p class="album-artist text-gray-400 mb-2">{{ album.artist }}</p>
+            <p class="album-description text-gray-300 mb-4">{{ album.description }}</p>
+            <ul class="tracklist space-y-2">
+              {% for track in album.tracks|split_by_comma %}
+                {% with track_duration=album.track_durations|split_by_comma|index:forloop.counter0 %}
+                <li class="flex justify-between items-center p-2 bg-gray-700 rounded hover:bg-gray-600 cursor-pointer" 
+                    onclick="playTrack('{{ track }}', '{{ album.artist }}', '{% static 'music_app/records/' %}{{ track }}.mp3', '{% static 'music_app/images/' %}{{ clean_title }}.jpg')">
+                  <span class="track-title">{{ track }}</span>
+                  <span class="track-duration text-gray-400">{{ track_duration|default:"3:00" }}</span>
+                </li>
+                {% endwith %}
+              {% endfor %}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -35,14 +40,16 @@
   {% endfor %}
 </div>
 
-<div id="player" class="music-player hidden">
-  <img id="player-cover" src="" class="player-cover" alt="cover">
-  <div class="player-info">
-    <h3 id="player-title">Title</h3>
-    <p id="player-artist">Artist</p>
+<div id="player" class="music-player fixed bottom-0 left-0 w-full bg-gray-900 text-white p-4 hidden">
+  <div class="flex items-center max-w-7xl mx-auto">
+    <img id="player-cover" src="" class="player-cover w-16 h-16 object-cover rounded-md" alt="cover">
+    <div class="player-info ml-4 flex-1">
+      <h3 id="player-title" class="text-lg font-bold">Title</h3>
+      <p id="player-artist" class="text-gray-400">Artist</p>
+    </div>
+    <audio id="audio" controls autoplay class="w-1/2"></audio>
+    <button onclick="closePlayer()" class="ml-4 bg-red-600 px-4 py-2 rounded hover:bg-red-700">Close</button>
   </div>
-  <audio id="audio" controls autoplay></audio>
-  <button onclick="closePlayer()">Close</button>
 </div>
 
 <script src="{% static 'music_app/js/player.js' %}"></script>

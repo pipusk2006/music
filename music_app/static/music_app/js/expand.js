@@ -1,27 +1,25 @@
-let currentExpanded = null;
+// expand.js
 
 function toggleAlbum(index) {
-  const allDetails = document.querySelectorAll('.album-details');
   const allCards = document.querySelectorAll('.album-card');
+  const allDetails = document.querySelectorAll('.album-details');
 
-  if (currentExpanded !== null && currentExpanded !== index) {
-    allDetails[currentExpanded].classList.add('hidden');
-    allCards[currentExpanded].classList.remove('expanded');
-  }
+  allCards.forEach((card, i) => {
+    if (i == index) {
+      card.classList.toggle('expanded');
+    } else {
+      card.classList.remove('expanded');
+    }
+  });
 
-  const card = allCards[index];
-  const details = allDetails[index];
-  const isVisible = !details.classList.contains('hidden');
-
-  if (isVisible) {
-    details.classList.add('hidden');
-    card.classList.remove('expanded');
-    currentExpanded = null;
-  } else {
-    details.classList.remove('hidden');
-    card.classList.add('expanded');
-    currentExpanded = index;
-  }
+  allDetails.forEach((detail, i) => {
+    if (i == index) {
+      detail.classList.toggle('hidden');
+    } else {
+      detail.classList.add('hidden');
+    }
+  });
 }
+
 
 

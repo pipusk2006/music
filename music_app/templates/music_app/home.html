@@ -6,10 +6,10 @@
 <div class="album-list">
   {% for album in albums %}
     {% with album.title|cut:" " as clean_title %}
-    <div class="album-card" onclick="toggleAlbum('{{ forloop.counter0 }}')">
-      <div class="album-preview">
-        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} cover" class="album-cover">
-        <div class="album-info">
+    <div class="album-card" id="album-card-{{ forloop.counter0 }}" onclick="toggleAlbum({{ forloop.counter0 }})">
+      <div class="album-collapsed">
+        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} cover" class="album-cover-thumb">
+        <div class="album-text">
           <h2>{{ album.title }}</h2>
           <p>{{ album.artist }}</p>
         </div>
@@ -48,6 +48,7 @@
 <script src="{% static 'music_app/js/player.js' %}"></script>
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 {% endblock %}
+
 
 
 

@@ -11,7 +11,7 @@ def home_view(request):
         # Добавь остальные треки здесь
     ]
 
-    return render(request, 'home.html', {
+    return render(request, 'music_app/home.html', {
         'tracks': tracks,
         'album_cover_url': album_cover,
     })

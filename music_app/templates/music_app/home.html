@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <div class="album-list">
   {% for album in albums %}
+    {% with album.title|cut:" " as clean_title %}
     <div class="album-card" onclick="toggleAlbum('{{ forloop.counter0 }}')">
       <div class="album-preview">
-        <img src="{% static album.cover %}" alt="{{ album.title }} cover" class="album-cover">
+        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} cover" class="album-cover">
         <div class="album-info">
           <h2>{{ album.title }}</h2>
           <p>{{ album.artist }}</p>
@@ -14,22 +16,22 @@
       </div>
 
       <div id="album-details-{{ forloop.counter0 }}" class="album-expanded hidden">
-        <img src="{% static album.cover %}" alt="{{ album.title }} large cover" class="album-cover-large">
+        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} large cover" class="album-cover-large">
         <div class="album-meta">
           <h2>{{ album.title }}</h2>
           <p class="album-artist">{{ album.artist }}</p>
           <p class="album-description">{{ album.description }}</p>
           <ul class="tracklist">
-            {% for track in album.tracks %}
-              <li onclick="playTrack('{{ track.title }}', '{{ track.artist }}', '{% static track.url %}', '{% static album.cover %}')">
-                <span class="track-title">{{ track.title }}</span>
-                <span class="track-duration">{{ track.duration }}</span>
+            {% for track in album.tracks|split_by_comma %}
+              <li onclick="playTrack('{{ track }}', '{{ album.artist }}', '{% static 'music_app/records/' %}{{ track }}.mp3', '{% static 'music_app/images/' %}{{ clean_title }}.jpg')">
+                <span class="track-title">{{ track }}</span>
               </li>
             {% endfor %}
           </ul>
         </div>
       </div>
     </div>
+    {% endwith %}
   {% endfor %}
 </div>
 
@@ -46,6 +48,10 @@
 <script src="{% static 'music_app/js/player.js' %}"></script>
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 {% endblock %}
+
+
+
+
 
 
 

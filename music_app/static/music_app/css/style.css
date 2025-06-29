@@ -110,51 +110,49 @@ a:hover {
   cursor: pointer;
   box-shadow: 0 0 10px rgba(255,255,255,0.1);
   transition: all 0.4s ease;
-  padding: 10px;
+  padding: 10px 20px;
+  min-height: 80px;
+  justify-content: space-between;
 }
 
 .album-card.expanded {
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   padding: 20px;
 }
 
 .album-card img.album-cover {
-  width: 120px;
-  height: 120px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 10px;
   flex-shrink: 0;
+}
+
+.album-card.expanded img.album-cover {
+  width: 160px;
+  height: 160px;
+  margin-bottom: 20px;
 }
 
 .album-info {
   padding-left: 20px;
   flex-grow: 1;
   color: white;
-}
-
-.album-card.expanded .album-info h2 {
-  font-size: 24px;
-  margin-bottom: 6px;
-  font-weight: bold;
-}
-
-.album-card.expanded .album-info p {
-  font-size: 16px;
-  margin-bottom: 12px;
-  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .album-details {
   display: none;
+  margin-top: 10px;
+  color: #ccc;
+  width: 100%;
 }
 
-.album-card.expanded + .album-details {
+.album-card.expanded .album-details {
   display: block;
-  margin-top: -10px;
-  margin-left: 160px;
-  max-width: calc(100% - 180px);
-  color: #ccc;
 }
 
 .album-description {
@@ -252,7 +250,8 @@ button {
   position: absolute;
   height: 100%;
   width: 0%;
-  background-color: #6ea3ff; /* сине-серый */
+  background-color: #6ea3ff;
   transition: width 0.2s ease;
 }
+
 

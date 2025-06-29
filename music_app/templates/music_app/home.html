@@ -6,28 +6,32 @@
 <div class="album-list">
   {% for album in albums %}
     {% with album.title|cut:" " as clean_title %}
-    <div class="album-card" id="album-card-{{ forloop.counter0 }}" onclick="toggleAlbum({{ forloop.counter0 }})">
-      <div class="album-collapsed">
-        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} cover" class="album-cover-thumb">
-        <div class="album-text">
-          <h2>{{ album.title }}</h2>
-          <p>{{ album.artist }}</p>
+    <div class="album-card" data-index="{{ forloop.counter0 }}" onclick="toggleAlbum('{{ forloop.counter0 }}')">
+      <div class="album-preview">
+        <div class="album-left">
+          <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} cover" class="album-cover-small">
+        </div>
+        <div class="album-right">
+          <h2 class="album-title">{{ album.title }}</h2>
+          <p class="album-artist">{{ album.artist }}</p>
         </div>
       </div>
 
       <div id="album-details-{{ forloop.counter0 }}" class="album-expanded hidden">
-        <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} large cover" class="album-cover-large">
-        <div class="album-meta">
-          <h2>{{ album.title }}</h2>
-          <p class="album-artist">{{ album.artist }}</p>
-          <p class="album-description">{{ album.description }}</p>
-          <ul class="tracklist">
-            {% for track in album.tracks|split_by_comma %}
-              <li onclick="playTrack('{{ track }}', '{{ album.artist }}', '{% static 'music_app/records/' %}{{ track }}.mp3', '{% static 'music_app/images/' %}{{ clean_title }}.jpg')">
-                <span class="track-title">{{ track }}</span>
-              </li>
-            {% endfor %}
-          </ul>
+        <div class="album-expanded-content">
+          <img src="{% static 'music_app/images/' %}{{ clean_title }}.jpg" alt="{{ album.title }} large cover" class="album-cover-large">
+          <div class="album-meta">
+            <h2>{{ album.title }}</h2>
+            <p class="album-artist">{{ album.artist }}</p>
+            <p class="album-description">{{ album.description }}</p>
+            <ul class="tracklist">
+              {% for track in album.tracks|split_by_comma %}
+                <li onclick="playTrack('{{ track }}', '{{ album.artist }}', '{% static 'music_app/records/' %}{{ track }}.mp3', '{% static 'music_app/images/' %}{{ clean_title }}.jpg')">
+                  <span class="track-title">{{ track }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -41,6 +45,9 @@
     <h3 id="player-title">Title</h3>
     <p id="player-artist">Artist</p>
   </div>
+  <div id="progress" class="progress-bar-wrapper">
+    <div id="progress-bar" class="progress-bar"></div>
+  </div>
   <audio id="audio" controls autoplay></audio>
   <button onclick="closePlayer()">Close</button>
 </div>
@@ -48,6 +55,7 @@
 <script src="{% static 'music_app/js/player.js' %}"></script>
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 {% endblock %}
+
 
 
 

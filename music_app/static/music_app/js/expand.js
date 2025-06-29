@@ -3,7 +3,7 @@ function toggleAlbum(index) {
   const allExpanded = document.querySelectorAll('.album-expanded');
 
   allCards.forEach((card, i) => {
-    const isCurrent = i == index;
+    const isCurrent = i === index;
 
     if (isCurrent) {
       card.classList.add('expanded');
@@ -14,12 +14,13 @@ function toggleAlbum(index) {
     }
   });
 
-  // Scroll into view
+  // Прокрутка к активному альбому
   const currentCard = allCards[index];
   if (currentCard) {
     currentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
+
 
 
 

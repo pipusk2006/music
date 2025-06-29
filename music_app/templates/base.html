@@ -1,34 +1,37 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Music App{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'music_app/css/style.css' %}">
+    <title>{% block title %}Музыка{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'music_app/css/style.css' %}">
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-left">
-            <img src="{% static 'music_app/images/logo.jpg' %}" alt="Logo" class="logo">
-            <a href="/" class="nav-btn">
-                <img src="{% static 'music_app/images/home.jpg' %}" alt="Home" class="home-icon">
-            </a>
-        </div>
+<header class="site-header">
+    <div class="header-left">
+        <img src="{% static 'music_app/images/logo.jpg' %}" alt="Logo" class="logo">
+        <a href="/" class="nav-btn">
+            <img src="{% static 'music_app/images/home.jpg' %}" alt="Home" class="home-icon">
+        </a>
+    </div>
 
-        <div class="header-center">
-            <input type="text" class="search-input" placeholder="what do you want to listen rn?">
-        </div>
+    <div class="header-center">
+        <input type="text" class="search-input" placeholder="что хочешь послушать?">
+    </div>
 
-        <div class="header-right">
-            <a href="/login/" class="login-link">Login</a>
-        </div>
-    </header>
+    <div class="header-right">
+        <a href="/login/" class="login-link">Войти</a>
+    </div>
+</header>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
 
+<script src="{% static 'music_app/js/expand.js' %}"></script>
+<script src="{% static 'music_app/js/player.js' %}"></script>
 </body>
 </html>
+

@@ -178,20 +178,17 @@ a:hover {
 .music-player {
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
-  background-color: #111;
-  color: white;
-  padding: 10px 20px;
+  background: #000;
+  color: #fff;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  border-top: 1px solid #333;
+  padding: 1rem;
   z-index: 1000;
+  border-top: 1px solid #222;
 }
-.music-player audio {
-  width: 300px;
-}
-
 
 .player-left {
   display: flex;

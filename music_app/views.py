@@ -55,7 +55,7 @@ def registration_view(request):
         send_mail(
             subject='Your verification code',
             message=f'Hello {login},\n\nYour verification code is: {code}',
-            from_email='noreply@yourdomain.com',
+            from_email=None,
             recipient_list=[email],
             fail_silently=False,
         )
@@ -96,6 +96,7 @@ def verify_email_view(request):
             messages.error(request, 'Invalid code. Try again.')
 
     return render(request, 'music_app/verify.html')
+
 
 
 

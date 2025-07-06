@@ -10,6 +10,15 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 
 
+def account_view(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+
+    user = get_object_or_404(UserProfile, id=user_id)
+    return render(request, 'music_app/account.html', {'user': user})
+
+
 def home_view(request):
     albums = Album.objects.all()
     user = None

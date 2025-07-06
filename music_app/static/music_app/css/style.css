@@ -99,9 +99,8 @@ a:hover {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 40px;
+    width: 100%;
 }
 
 /* === ALBUM CARD - COMMON STYLES === */
@@ -112,7 +111,7 @@ a:hover {
     cursor: pointer;
     overflow: hidden;
     background-color: #1e1e1e;
-    position: relative;
+    width: 100%;
 }
 
 /* === COMPACT CARD === */
@@ -131,40 +130,28 @@ a:hover {
     transition: all 0.4s ease;
 }
 
-.album-card.compact .album-info h2 {
-    font-size: 24px;
-    margin-bottom: 8px;
-    color: #fff;
-}
-
-.album-card.compact .album-info p {
-    font-size: 18px;
-    color: #b3b3b3;
-}
-
-.album-card.compact .expanded-content {
-    display: none;
-}
-
 /* === EXPANDED CARD === */
 .album-card.expanded {
-    flex-direction: column;
     padding: 40px;
     align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.album-card.expanded .album-cover-container {
+    flex: 0 0 300px;
+    margin-right: 40px;
 }
 
 .album-card.expanded .album-cover {
     width: 300px;
     height: 300px;
-    margin-bottom: 24px;
     object-fit: cover;
     border-radius: 8px;
-    align-self: center;
 }
 
-.album-card.expanded .album-info {
-    width: 100%;
-    margin-bottom: 24px;
+.album-card.expanded .album-content {
+    flex: 1;
+    min-width: 300px;
 }
 
 .album-card.expanded .album-info h2 {
@@ -176,11 +163,7 @@ a:hover {
 .album-card.expanded .album-info p {
     font-size: 20px;
     color: #b3b3b3;
-}
-
-.album-card.expanded .expanded-content {
-    display: block;
-    width: 100%;
+    margin-bottom: 24px;
 }
 
 .album-card.expanded .album-description {
@@ -188,7 +171,6 @@ a:hover {
     margin-bottom: 24px;
     line-height: 1.5;
     color: #ccc;
-    max-width: 800px;
 }
 
 .album-card.expanded .tracklist {
@@ -196,25 +178,26 @@ a:hover {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
 }
 
 .album-card.expanded .tracklist li {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0;
+    padding: 12px 15px;
     color: #999;
-    border-bottom: 1px solid #333;
+    background-color: #282828;
+    border-radius: 6px;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .album-card.expanded .tracklist li:hover {
+    background-color: #383838;
     color: #1db954;
 }
 
-.album-card.expanded .tracklist li:last-child {
-    border-bottom: none;
-}
+
 
 /* === MUSIC PLAYER === */
 .music-player {

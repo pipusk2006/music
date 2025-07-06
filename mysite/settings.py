@@ -150,3 +150,8 @@ EMAIL_HOST_USER = 'klimentfeofilov11@yandex.ru'  # твой адрес
 EMAIL_HOST_PASSWORD = 'hffeyurfqgjqpqky'   # пароль приложения
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://music-production-22dc.up.railway.app',
+]
+
+

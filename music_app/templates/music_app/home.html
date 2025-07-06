@@ -25,21 +25,19 @@
     </div>
 </header>
 
-
 <main>
     <div class="album-list">
         {% for album in albums %}
         <div class="album-card compact" 
-             onclick="toggleAlbum(this)"
              data-album='{
                  "title": "{{ album.title|escapejs }}",
                  "artist": "{{ album.artist|escapejs }}",
                  "description": "{{ album.description|escapejs }}",
-                 "cover": "{% static album.get_cover_path %}",
-                 "tracks": {{ album.tracks|escapejs }},
+                 "cover": "{{ album.cover_url }}",
+                 "tracks": "{{ album.tracks|escapejs }}",
                  "durations": "{{ album.duration|default:""|escapejs }}"
              }'>
-            <img src="{% static album.get_cover_path %}" 
+            <img src="{{ album.cover_url }}" 
                  alt="{{ album.title }}" 
                  class="album-cover"
                  onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">
@@ -52,8 +50,18 @@
     </div>
 </main>
 
+<script>
+    document.querySelectorAll('.album-card').forEach(card => {
+        card.addEventListener('click', function () {
+            toggleAlbum(this);
+        });
+    });
+</script>
 <script src="{% static 'music_app/js/player.js' %}"></script>
 <script src="{% static 'music_app/js/expand.js' %}"></script>
+</body>
+</html>
+
 
 
 

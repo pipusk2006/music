@@ -29,7 +29,9 @@
     <div class="album-list">
         {% for album in albums %}
         <div class="album-card compact" 
-             onclick="toggleAlbum(this, {{ forloop.counter0 }})"
+            <li onclick="playTrack('{{ track.name }}', '{{ album.artist }}', '{{ track.url }}', '{{ album.cover_url }}')">
+                {{ track.name }}
+            </li>
              data-title="{{ album.title }}"
              data-artist="{{ album.artist }}"
              data-description="{{ album.description }}"

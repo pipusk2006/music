@@ -1,33 +1,32 @@
-let audio = document.getElementById("audio");
-let progress = document.getElementById("progress");
-let progressBar = document.getElementById("progress-bar");
-
 function playTrack(title, artist, url, cover) {
-  document.getElementById("player-title").innerText = title;
-  document.getElementById("player-artist").innerText = artist;
-  document.getElementById("player-cover").src = cover;
+    const audio = document.getElementById("audio");
+    const player = document.getElementById("player");
+    
+    console.log("Attempting to play:", url); // Для отладки
+    
+    // Проверяем доступность файла
+    fetch(url)
+        .then(response => {
+            if (!response.ok) throw new Error('Audio file not found');
+            
+            document.getElementById("player-title").textContent = title;
+            document.getElementById("player-artist").textContent = artist;
+            document.getElementById("player-cover").src = cover;
 
-  audio.src = url;
-  audio.play();
-  document.getElementById("player").classList.remove("hidden");
+            audio.src = url;
+            return audio.play();
+        })
+        .then(() => {
+            player.classList.remove("hidden");
+        })
+        .catch(error => {
+            console.error("Playback error:", error);
+            alert(`Ошибка загрузки трека: ${url}`);
+        });
+    
+    // Останавливаем всплытие события
+    if (event) event.stopPropagation();
 }
-
-function closePlayer() {
-  audio.pause();
-  document.getElementById("player").classList.add("hidden");
-}
-
-audio.ontimeupdate = () => {
-  const percent = (audio.currentTime / audio.duration) * 100;
-  progressBar.style.width = percent + "%";
-};
-
-progress.onclick = (e) => {
-  const clickX = e.offsetX;
-  const width = progress.clientWidth;
-  const duration = audio.duration;
-  audio.currentTime = (clickX / width) * duration;
-};
 
 
 

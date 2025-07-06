@@ -1,5 +1,16 @@
 from django.db import models
 
+class UserProfile(models.Model):
+    login = models.CharField(max_length=150, unique=True)
+    password = models.CharField(max_length=128)
+    email = models.EmailField(unique=True)
+    last_login = models.DateTimeField(null=True, blank=True)
+    fav_albums = models.ManyToManyField('Album', blank=True)
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.login
+
 class Album(models.Model):
     title = models.CharField(max_length=255)
     artist = models.CharField(max_length=255)
@@ -15,5 +26,7 @@ class Album(models.Model):
 
     def get_durations_list(self):
         return [d.strip() for d in self.duration.split(',')] if self.duration else []  # ← Используем duration (без 's')
+
+
 
 

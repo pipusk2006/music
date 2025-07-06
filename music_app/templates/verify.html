@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Verification</title>
+    <link rel="stylesheet" href="{% static 'music_app/css/style.css' %}">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+        }
+        .verify-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 16px;
+        }
+        .verify-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #121212;
+            border: none;
+            color: #fff;
+            border-radius: 999px;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #89A1B7;
+            color: #fff;
+            border-radius: 999px;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff4d4d;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="verify-container">
+    <h2>Enter 6-digit code</h2>
+    <p>Check your email. Enter the code to complete registration.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="code" placeholder="123456" maxlength="6" required>
+        <button type="submit">Verify</button>
+    </form>
+
+    {% if messages %}
+        <div class="error">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>
+

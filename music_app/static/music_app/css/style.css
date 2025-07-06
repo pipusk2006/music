@@ -80,8 +80,8 @@ a:hover {
 
 /* === LOGIN LINK === */
 .login-link {
-    background-color: #fff;
-    color: #000;
+    background-color: #89A1B7;
+    color: #fff;
     padding: 8px 20px;
     border-radius: 999px;
     font-weight: bold;
@@ -90,7 +90,7 @@ a:hover {
 }
 
 .login-link:hover {
-    background-color: #1db954;
+    background-color: #678199;
     color: #fff;
 }
 

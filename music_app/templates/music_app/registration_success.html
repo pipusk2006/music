@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Complete</title>
+    <link rel="stylesheet" href="{% static 'music_app/css/style.css' %}">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+        }
+        .success-box {
+            max-width: 400px;
+            margin: 100px auto;
+            text-align: center;
+            padding: 40px;
+            background-color: #1e1e1e;
+            border-radius: 16px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #89A1B7;
+            padding: 10px 20px;
+            border-radius: 999px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="success-box">
+    <h2>Welcome, {{ user.login }}!</h2>
+    <p>Your email has been successfully verified.</p>
+    <a href="{% url 'login' %}">Go to Login</a>
+</div>
+</body>
+</html>

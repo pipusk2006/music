@@ -100,6 +100,8 @@ a:hover {
     flex-direction: column;
     gap: 20px;
     padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
     width: 100%;
 }
 
@@ -111,6 +113,7 @@ a:hover {
     cursor: pointer;
     overflow: hidden;
     background-color: #1e1e1e;
+    position: relative;
     width: 100%;
 }
 
@@ -130,11 +133,22 @@ a:hover {
     transition: all 0.4s ease;
 }
 
+.album-card.compact .album-info h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.album-card.compact .album-info p {
+    font-size: 18px;
+    color: #b3b3b3;
+}
+
 /* === EXPANDED CARD === */
 .album-card.expanded {
     padding: 40px;
     align-items: flex-start;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .album-card.expanded .album-cover-container {
@@ -151,7 +165,7 @@ a:hover {
 
 .album-card.expanded .album-content {
     flex: 1;
-    min-width: 300px;
+    min-width: 0;
 }
 
 .album-card.expanded .album-info h2 {
@@ -171,33 +185,42 @@ a:hover {
     margin-bottom: 24px;
     line-height: 1.5;
     color: #ccc;
+    max-width: 100%;
 }
 
+/* === TRACKLIST STYLES === */
 .album-card.expanded .tracklist {
     width: 100%;
     list-style: none;
     padding: 0;
     margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .album-card.expanded .tracklist li {
-    padding: 12px 15px;
-    color: #999;
-    background-color: #282828;
-    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    color: #aaa;
+    border-bottom: 1px solid #333;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: color 0.2s;
 }
 
 .album-card.expanded .tracklist li:hover {
-    background-color: #383838;
     color: #1db954;
 }
 
+.album-card.expanded .tracklist li:last-child {
+    border-bottom: none;
+}
 
+.album-card.expanded .tracklist .duration {
+    color: #777;
+    font-size: 0.9em;
+    margin-left: 15px;
+}
 
 /* === MUSIC PLAYER === */
 .music-player {
@@ -212,6 +235,7 @@ a:hover {
     gap: 16px;
     z-index: 100;
     color: white;
+    border-top: 1px solid #282828;
 }
 
 .music-player.hidden {
@@ -227,50 +251,73 @@ a:hover {
 
 .player-info {
     flex-grow: 1;
+    min-width: 0;
 }
 
 .player-info h3 {
     margin-bottom: 4px;
     font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .player-info p {
     font-size: 14px;
     color: #aaa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-audio {
-    flex-grow: 1;
-    accent-color: #6ea3ff;
-    background-color: transparent;
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-button {
+.player-controls button {
     background: none;
     border: none;
-    color: #6ea3ff;
+    color: white;
     font-size: 20px;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
-/* === PLAYER CUSTOM PROGRESS BAR === */
-#progress {
-    position: relative;
+.player-controls button:hover {
+    color: #1db954;
+}
+
+.player-progress {
+    flex-grow: 1;
+    max-width: 600px;
+    margin: 0 20px;
+}
+
+.progress-container {
     width: 100%;
-    height: 8px;
-    background-color: #333;
-    border-radius: 4px;
+    height: 4px;
+    background-color: #535353;
+    border-radius: 2px;
     cursor: pointer;
     margin: 10px 0;
-    overflow: hidden;
 }
 
-#progress-bar {
-    position: absolute;
+.progress-bar {
     height: 100%;
+    background-color: #1db954;
+    border-radius: 2px;
     width: 0%;
-    background-color: #6ea3ff;
-    transition: width 0.2s ease;
+    transition: width 0.1s linear;
+}
+
+.time-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 4px;
 }
 
 /* === HIDDEN CLASS === */

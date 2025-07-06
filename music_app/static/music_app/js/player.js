@@ -14,6 +14,9 @@ function playTrack(title, artist, url, cover) {
     player.querySelector('.player-info p').textContent = artist;
     player.classList.remove('hidden');
     
+    console.log('AUDIO ELEMENT:', audio);
+    console.log('SOURCE:', audio.src);
+
     audio.play().catch(e => console.error('Playback failed:', e));
 }
 

@@ -1,24 +1,56 @@
-function toggleAlbum(index) {
+function toggleAlbum(cardElement, index) {
+  const isExpanding = cardElement.classList.contains('compact');
   const allCards = document.querySelectorAll('.album-card');
-  const allExpanded = document.querySelectorAll('.album-expanded');
-
-  allCards.forEach((card, i) => {
-    const isCurrent = i === index;
-
-    if (isCurrent) {
-      card.classList.remove('compact');
-      card.classList.add('expanded');
-      allExpanded[i].classList.remove('hidden');
-    } else {
+  
+  // Сначала свернем все карточки
+  allCards.forEach(card => {
+    if (card !== cardElement) {
       card.classList.remove('expanded');
       card.classList.add('compact');
-      allExpanded[i].classList.add('hidden');
+      card.querySelector('.expanded-content').classList.add('hidden');
     }
   });
 
-  const currentCard = allCards[index];
-  if (currentCard) {
-    currentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Затем работаем с текущей карточкой
+  if (isExpanding) {
+    // Раскрываем карточку
+    cardElement.classList.remove('compact');
+    cardElement.classList.add('expanded');
+    
+    // Заполняем данные
+    const expandedContent = cardElement.querySelector('.expanded-content');
+    expandedContent.querySelector('.album-description').textContent = cardElement.dataset.description;
+    
+    const tracklist = expandedContent.querySelector('.tracklist');
+    tracklist.innerHTML = '';
+    
+    try {
+      const tracks = JSON.parse(cardElement.dataset.tracks);
+      tracks.forEach(track => {
+        const li = document.createElement('li');
+        li.textContent = track;
+        li.onclick = () => playTrack(
+          track, 
+          cardElement.dataset.artist, 
+          `${track}.mp3`, 
+          cardElement.dataset.cover
+        );
+        tracklist.appendChild(li);
+      });
+    } catch (e) {
+      console.error('Error parsing tracks:', e);
+    }
+    
+    expandedContent.classList.remove('hidden');
+  } else {
+    // Сворачиваем карточку
+    cardElement.classList.remove('expanded');
+    cardElement.classList.add('compact');
+    cardElement.querySelector('.expanded-content').classList.add('hidden');
+  }
+
+  if (isExpanding) {
+    cardElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 

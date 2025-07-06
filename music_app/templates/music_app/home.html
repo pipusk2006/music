@@ -26,24 +26,25 @@
 </header>
 
 <main>
+<main>
     <div class="album-list">
         {% for album in albums %}
-            <div class="album-card compact" onclick="toggleAlbum({{ forloop.counter0 }})">
+            <div class="album-card compact" onclick="toggleAlbum(this, {{ forloop.counter0 }})" 
+                 data-title="{{ album.title }}"
+                 data-artist="{{ album.artist }}"
+                 data-description="{{ album.description }}"
+                 data-cover="{{ album.cover_url }}"
+                 data-tracks='{{ album.tracks|safe }}'>
                 <img src="{{ album.cover_url }}" alt="Обложка альбома" class="album-cover">
                 <div class="album-info">
                     <h2>{{ album.title }}</h2>
                     <p>{{ album.artist }}</p>
                 </div>
-            </div>
-            <div class="album-expanded hidden">
-                <p class="album-description">{{ album.description }}</p>
-                <ul class="tracklist">
-                    {% for track in album.tracks %}
-                    <li onclick="playTrack('{{ track }}', '{{ album.artist }}', '{{ track }}.mp3', '{{ album.cover_url }}')">
-                        {{ track }}
-                    </li>
-                    {% endfor %}
-                </ul>
+                <!-- Это будет появляться при раскрытии -->
+                <div class="expanded-content hidden">
+                    <p class="album-description"></p>
+                    <ul class="tracklist"></ul>
+                </div>
             </div>
         {% endfor %}
     </div>

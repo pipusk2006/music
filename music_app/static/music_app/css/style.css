@@ -94,174 +94,205 @@ a:hover {
     color: #fff;
 }
 
+/* === ALBUM LIST === */
 .album-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
+/* === ALBUM CARD - COMMON STYLES === */
 .album-card {
-  display: flex;
-  align-items: center;
-  border-radius: 16px;
-  transition: all 0.4s ease;
-  cursor: pointer;
-  overflow: hidden;
-  background-color: #1e1e1e;
+    display: flex;
+    border-radius: 16px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #1e1e1e;
+    position: relative;
 }
 
-/* Компактная карточка */
+/* === COMPACT CARD === */
 .album-card.compact {
-  height: 150px; /* было 60px */
-  padding: 20px 32px; /* увеличено */
+    height: 150px;
+    padding: 20px 32px;
+    align-items: center;
 }
 
-.album-card.compact img.album-cover {
-  width: 125px;  /* было 50px */
-  height: 125px;
-  margin-right: 24px;
+.album-card.compact .album-cover {
+    width: 125px;
+    height: 125px;
+    margin-right: 24px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: all 0.4s ease;
 }
 
 .album-card.compact .album-info h2 {
-  font-size: 24px;  /* было 16px */
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #fff;
 }
 
 .album-card.compact .album-info p {
-  font-size: 18px;  /* было 14px */
+    font-size: 18px;
+    color: #b3b3b3;
 }
 
+.album-card.compact .expanded-content {
+    display: none;
+}
 
-/* Расширенная карточка */
+/* === EXPANDED CARD === */
 .album-card.expanded {
-  padding: 40px;
+    flex-direction: column;
+    padding: 40px;
+    align-items: flex-start;
 }
 
-.album-card.expanded img.album-cover {
-  width: 300px;  /* было 180px */
-  height: 300px;
-  margin-bottom: 24px;
+.album-card.expanded .album-cover {
+    width: 300px;
+    height: 300px;
+    margin-bottom: 24px;
+    object-fit: cover;
+    border-radius: 8px;
+    align-self: center;
+}
+
+.album-card.expanded .album-info {
+    width: 100%;
+    margin-bottom: 24px;
 }
 
 .album-card.expanded .album-info h2 {
-  font-size: 32px;  /* было 22px */
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: #fff;
 }
 
 .album-card.expanded .album-info p {
-  font-size: 20px;
+    font-size: 20px;
+    color: #b3b3b3;
 }
 
-
-.album-expanded {
-  margin-top: 12px;
-  padding: 10px 20px;
-  background-color: #111;
-  border-radius: 12px;
-  color: #ccc;
+.album-card.expanded .expanded-content {
+    display: block;
+    width: 100%;
 }
 
-.album-expanded.hidden {
-  display: none;
+.album-card.expanded .album-description {
+    font-size: 16px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+    color: #ccc;
+    max-width: 800px;
 }
 
-
-.album-description {
-  font-size: 15px;
-  margin-bottom: 10px;
-  line-height: 1.5;
-  color: #ccc;
+.album-card.expanded .tracklist {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.tracklist {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.album-card.expanded .tracklist li {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    color: #999;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-.tracklist li {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  color: #999;
-  border-bottom: 1px solid #333;
-  cursor: pointer;
+.album-card.expanded .tracklist li:hover {
+    color: #1db954;
 }
 
-.tracklist li:hover {
-  color: #fff;
+.album-card.expanded .tracklist li:last-child {
+    border-bottom: none;
 }
 
+/* === MUSIC PLAYER === */
 .music-player {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #121212;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  z-index: 100;
-  color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #121212;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    color: white;
 }
 
 .music-player.hidden {
-  display: none;
+    display: none;
 }
 
 .player-cover {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 8px;
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 .player-info {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .player-info h3 {
-  margin-bottom: 4px;
-  font-size: 18px;
+    margin-bottom: 4px;
+    font-size: 18px;
 }
 
 .player-info p {
-  font-size: 14px;
-  color: #aaa;
+    font-size: 14px;
+    color: #aaa;
 }
 
 audio {
-  flex-grow: 1;
-  accent-color: #6ea3ff;
-  background-color: transparent;
+    flex-grow: 1;
+    accent-color: #6ea3ff;
+    background-color: transparent;
 }
 
 button {
-  background: none;
-  border: none;
-  color: #6ea3ff;
-  font-size: 20px;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: #6ea3ff;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 /* === PLAYER CUSTOM PROGRESS BAR === */
 #progress {
-  position: relative;
-  width: 100%;
-  height: 8px;
-  background-color: #333;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 10px 0;
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 8px;
+    background-color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px 0;
+    overflow: hidden;
 }
 
 #progress-bar {
-  position: absolute;
-  height: 100%;
-  width: 0%;
-  background-color: #6ea3ff;
-  transition: width 0.2s ease;
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    background-color: #6ea3ff;
+    transition: width 0.2s ease;
+}
+
+/* === HIDDEN CLASS === */
+.hidden {
+    display: none;
 }
 
 

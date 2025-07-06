@@ -20,7 +20,11 @@
     </div>
 
     <div class="header-right">
-        <a href="/login/" class="login-link">Login</a>
+        {% if user %}
+            <a href="{% url 'account' %}" class="login-link">Account</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="login-link">Login</a>
+        {% endif %}
     </div>
 </header>
 
@@ -93,6 +97,7 @@
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 </body>
 </html>
+
 
 
 

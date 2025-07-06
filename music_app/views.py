@@ -7,10 +7,18 @@ from django.utils.crypto import get_random_string
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 
 
 def home_view(request):
     albums = Album.objects.all()
+    user = None
+
+    if request.session.get('user_id'):
+        try:
+            user = UserProfile.objects.get(id=request.session['user_id'])
+        except UserProfile.DoesNotExist:
+            user = None
 
     for album in albums:
         album.cover_url = static(album.get_cover_path())
@@ -22,11 +30,37 @@ def home_view(request):
             for track in album.get_track_list()
         ]
 
-    return render(request, 'music_app/home.html', {'albums': albums})
+    return render(request, 'music_app/home.html', {
+        'albums': albums,
+        'user': user
+    })
+
 
 
 def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = UserProfile.objects.get(login=username)
+        except UserProfile.DoesNotExist:
+            messages.error(request, 'User not found')
+            return render(request, 'music_app/login.html')
+
+        if not user.is_verified:
+            messages.error(request, 'Email not verified')
+            return render(request, 'music_app/login.html')
+
+        if check_password(password, user.password):
+            request.session['user_id'] = user.id  # создаём сессию
+            return redirect('home')
+        else:
+            messages.error(request, 'Incorrect password')
+            return render(request, 'music_app/login.html')
+
     return render(request, 'music_app/login.html')
+
 
 
 def registration_view(request):

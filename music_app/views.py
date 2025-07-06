@@ -1,5 +1,5 @@
 from django.templatetags.static import static
-from models import Album
+from music_app.models import Album  # Явное указание приложения
 from django.shortcuts import render
 
 def home_view(request):

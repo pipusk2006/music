@@ -48,6 +48,13 @@
                 <h2>{{ album.title }}</h2>
                 <p>{{ album.artist }}</p>
             </div>
+
+            <!-- Кнопка избранного -->
+            <img src="{% static 'music_app/images/fav_2.jpg' if album.id in fav_album_ids else 'music_app/images/fav_1.jpg' %}"
+                 class="fav-toggle"
+                 data-fav="{{ 'true' if album.id in fav_album_ids else 'false' }}"
+                 data-album-id="{{ album.id }}"
+                 onclick="toggleFavorite(this)">
         </div>
         {% endfor %}
     </div>
@@ -92,11 +99,37 @@
             toggleAlbum(this);
         });
     });
+
+    function toggleFavorite(icon) {
+        const albumId = icon.dataset.albumId;
+        const isFav = icon.dataset.fav === 'true';
+
+        fetch("{% url 'toggle_favorite' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "album_id=" + albumId
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'added') {
+                icon.src = "{% static 'music_app/images/fav_2.jpg' %}";
+                icon.dataset.fav = 'true';
+            } else {
+                icon.src = "{% static 'music_app/images/fav_1.jpg' %}";
+                icon.dataset.fav = 'false';
+            }
+        });
+    }
 </script>
+
 <script src="{% static 'music_app/js/player.js' %}"></script>
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 </body>
 </html>
+
 
 
 

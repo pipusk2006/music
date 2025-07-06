@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     login = models.CharField(max_length=150, unique=True)
@@ -26,6 +27,15 @@ class Album(models.Model):
 
     def get_durations_list(self):
         return [d.strip() for d in self.duration.split(',')] if self.duration else []  # ← Используем duration (без 's')
+
+
+class FavoriteAlbum(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'album')
+
 
 
 

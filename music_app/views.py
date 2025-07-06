@@ -140,6 +140,23 @@ def verify_email_view(request):
 
     return render(request, 'music_app/verify.html')
 
+from django.http import JsonResponse
+from .models import Album, FavoriteAlbum
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def toggle_favorite(request):
+    if request.method == "POST":
+        album_id = request.POST.get('album_id')
+        album = Album.objects.get(id=album_id)
+        fav, created = FavoriteAlbum.objects.get_or_create(user=request.user, album=album)
+
+        if not created:
+            fav.delete()
+            return JsonResponse({'status': 'removed'})
+        return JsonResponse({'status': 'added'})
+
+
 
 
 

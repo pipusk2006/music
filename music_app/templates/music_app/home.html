@@ -25,20 +25,28 @@
     </div>
 </header>
 
+{% load static %}
+
 <main>
     <div class="album-list">
         {% for album in albums %}
         <div class="album-card compact" 
-            <li onclick="playTrack('{{ track.name }}', '{{ album.artist }}', '{{ track.url }}', '{{ album.cover_url }}')">
-                {{ track.name }}
-            </li>
-             data-title="{{ album.title }}"
-             data-artist="{{ album.artist }}"
-             data-description="{{ album.description }}"
-             data-cover="{{ album.cover_url }}"
-             data-tracks="{{ album.tracks }}"
-             data-durations="{{ album.durations }}">
-            <img src="{{ album.cover_url }}" alt="Обложка альбома" class="album-cover">
+             data-album='{
+                 "title": "{{ album.title|escapejs }}",
+                 "artist": "{{ album.artist|escapejs }}",
+                 "description": "{{ album.description|escapejs }}",
+                 "cover": "{% static album.get_cover_path %}",
+                 "tracks": [
+                     {% for track in album.get_track_list %}
+                     {"name": "{{ track|escapejs }}", "duration": "{{ album.get_durations_list.forloop.counter0|default:'' }}"}
+                     {% if not forloop.last %},{% endif %}
+                     {% endfor %}
+                 ]
+             }'>
+            <img src="{% static album.get_cover_path %}" 
+                 alt="{{ album.title }}" 
+                 class="album-cover"
+                 onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">
             <div class="album-info">
                 <h2>{{ album.title }}</h2>
                 <p>{{ album.artist }}</p>

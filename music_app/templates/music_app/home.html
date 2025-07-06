@@ -50,11 +50,19 @@
             </div>
 
             <!-- Кнопка избранного -->
-            <img src="{% static 'music_app/images/fav_2.jpg' if album.id in fav_album_ids else 'music_app/images/fav_1.jpg' %}"
-                 class="fav-toggle"
-                 data-fav="{{ 'true' if album.id in fav_album_ids else 'false' }}"
-                 data-album-id="{{ album.id }}"
-                 onclick="toggleFavorite(this)">
+            {% if album.id in fav_album_ids %}
+                <img src="{% static 'music_app/images/fav_2.jpg' %}"
+                     class="fav-toggle"
+                     data-fav="true"
+                     data-album-id="{{ album.id }}"
+                     onclick="toggleFavorite(this)">
+            {% else %}
+                <img src="{% static 'music_app/images/fav_1.jpg' %}"
+                     class="fav-toggle"
+                     data-fav="false"
+                     data-album-id="{{ album.id }}"
+                     onclick="toggleFavorite(this)">
+            {% endif %}
         </div>
         {% endfor %}
     </div>
@@ -102,7 +110,6 @@
 
     function toggleFavorite(icon) {
         const albumId = icon.dataset.albumId;
-        const isFav = icon.dataset.fav === 'true';
 
         fetch("{% url 'toggle_favorite' %}", {
             method: "POST",
@@ -129,6 +136,7 @@
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 </body>
 </html>
+
 
 
 

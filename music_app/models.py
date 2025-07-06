@@ -5,7 +5,7 @@ class Album(models.Model):
     artist = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     tracks = models.TextField()  # "Track 1, Track 2, Track 3"
-    durations = models.TextField(blank=True)  # "3:42, 4:15, 2:58"
+    duration = models.CharField(max_length=10, blank=True)  # Убедитесь, что имя совпадает с БД
 
     def get_cover_path(self):
         return f"music_app/images/{self.title.replace(' ', '_')}.jpg"

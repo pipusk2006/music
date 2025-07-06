@@ -50,6 +50,20 @@
     </div>
 </main>
 
+<!-- ✅ Добавляем плеер прямо здесь, внутри body -->
+<div class="music-player hidden">
+    <img src="" class="player-cover" alt="cover">
+    <div class="player-info">
+        <h3></h3>
+        <p></p>
+    </div>
+    <div class="player-controls">
+        <button onclick="document.querySelector('audio')?.play()">▶️</button>
+        <button onclick="document.querySelector('audio')?.pause()">⏸</button>
+    </div>
+    <audio></audio>
+</div>
+
 <script>
     document.querySelectorAll('.album-card').forEach(card => {
         card.addEventListener('click', function () {
@@ -61,6 +75,7 @@
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 </body>
 </html>
+
 
 
 

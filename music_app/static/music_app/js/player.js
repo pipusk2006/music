@@ -1,31 +1,20 @@
 function playTrack(title, artist, url, cover) {
-    const audio = document.getElementById("audio");
-    const player = document.getElementById("player");
+    console.log(`Attempting to play: ${url}`);
     
-    console.log("Attempting to play:", url); // Для отладки
+    const player = document.querySelector('.music-player');
+    const audio = document.querySelector('audio') || document.createElement('audio');
     
-    // Проверяем доступность файла
-    fetch(url)
-        .then(response => {
-            if (!response.ok) throw new Error('Audio file not found');
-            
-            document.getElementById("player-title").textContent = title;
-            document.getElementById("player-artist").textContent = artist;
-            document.getElementById("player-cover").src = cover;
-
-            audio.src = url;
-            return audio.play();
-        })
-        .then(() => {
-            player.classList.remove("hidden");
-        })
-        .catch(error => {
-            console.error("Playback error:", error);
-            alert(`Ошибка загрузки трека: ${url}`);
-        });
+    if (!document.querySelector('audio')) {
+        player.appendChild(audio);
+    }
     
-    // Останавливаем всплытие события
-    if (event) event.stopPropagation();
+    audio.src = url;
+    player.querySelector('.player-cover').src = cover;
+    player.querySelector('.player-info h3').textContent = title;
+    player.querySelector('.player-info p').textContent = artist;
+    player.classList.remove('hidden');
+    
+    audio.play().catch(e => console.error('Playback failed:', e));
 }
 
 

@@ -50,17 +50,36 @@
     </div>
 </main>
 
-<!-- ✅ Добавляем плеер прямо здесь, внутри body -->
-<div class="music-player hidden">
-    <img src="" class="player-cover" alt="cover">
-    <div class="player-info">
-        <h3></h3>
-        <p></p>
-    </div>
+<!-- ✅ Новый плеер -->
+<div id="player" class="music-player hidden">
     <div class="player-controls">
-        <button onclick="document.querySelector('audio')?.play()">▶️</button>
-        <button onclick="document.querySelector('audio')?.pause()">⏸</button>
+        <button class="control-btn" onclick="skipBackward()">
+            <img src="{% static 'music_app/images/back_logo.png' %}" alt="Back">
+        </button>
+        <button class="control-btn" onclick="togglePlay()">
+            <img id="play-pause-icon" src="{% static 'music_app/images/play_logo.png' %}" alt="Play">
+        </button>
+        <button class="control-btn" onclick="skipForward()">
+            <img src="{% static 'music_app/images/forward_logo.png' %}" alt="Forward">
+        </button>
     </div>
+    
+    <img class="player-cover" src="" alt="Album Cover">
+    
+    <div class="player-info">
+        <h3 id="player-title">Track Title</h3>
+        <p id="player-artist">Artist</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="time-info">
+            <span id="current-time">0:00</span>
+            <span id="total-time">0:00</span>
+        </div>
+    </div>
+
     <audio></audio>
 </div>
 
@@ -75,6 +94,7 @@
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 </body>
 </html>
+
 
 
 

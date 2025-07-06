@@ -1,24 +1,96 @@
-function playTrack(title, artist, url, cover) {
-    console.log(`Attempting to play: ${url}`);
-    
-    const player = document.querySelector('.music-player');
-    const audio = document.querySelector('audio') || document.createElement('audio');
-    
-    if (!document.querySelector('audio')) {
-        player.appendChild(audio);
-    }
-    
-    audio.src = url;
-    player.querySelector('.player-cover').src = cover;
-    player.querySelector('.player-info h3').textContent = title;
-    player.querySelector('.player-info p').textContent = artist;
-    player.classList.remove('hidden');
-    
-    console.log('AUDIO ELEMENT:', audio);
-    console.log('SOURCE:', audio.src);
+let audio = new Audio();
+let isPlaying = false;
+let updateInterval;
 
-    audio.play().catch(e => console.error('Playback failed:', e));
+function playTrack(title, artist, url, cover) {
+    // Останавливаем текущее воспроизведение
+    audio.pause();
+    clearInterval(updateInterval);
+    
+    // Устанавливаем новые данные
+    audio.src = url;
+    document.querySelector('.player-cover').src = cover;
+    document.getElementById('player-title').textContent = title;
+    document.getElementById('player-artist').textContent = artist;
+    
+    // Показываем плеер
+    document.getElementById('player').classList.remove('hidden');
+    
+    // Начинаем воспроизведение
+    audio.play()
+        .then(() => {
+            isPlaying = true;
+            document.getElementById('play-pause-icon').src = 
+                '{% static "music_app/images/pause_logo.png" %}';
+            startProgressUpdate();
+        })
+        .catch(e => console.error('Playback failed:', e));
 }
+
+function togglePlay() {
+    if (audio.src) {
+        if (isPlaying) {
+            audio.pause();
+            document.getElementById('play-pause-icon').src = 
+                '{% static "music_app/images/play_logo.png" %}';
+        } else {
+            audio.play();
+            document.getElementById('play-pause-icon').src = 
+                '{% static "music_app/images/pause_logo.png" %}';
+            startProgressUpdate();
+        }
+        isPlaying = !isPlaying;
+    }
+}
+
+function skipBackward() {
+    audio.currentTime = Math.max(0, audio.currentTime - 10);
+}
+
+function skipForward() {
+    audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+}
+
+function startProgressUpdate() {
+    clearInterval(updateInterval);
+    updateInterval = setInterval(updateProgress, 1000);
+    updateProgress();
+}
+
+function updateProgress() {
+    if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        document.getElementById('progress-bar').style.width = percent + '%';
+        
+        document.getElementById('current-time').textContent = 
+            formatTime(audio.currentTime);
+        document.getElementById('total-time').textContent = 
+            formatTime(audio.duration);
+    }
+}
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+// Обработчик клика по прогресс-бару
+document.querySelector('.progress-container').addEventListener('click', function(e) {
+    if (audio.duration) {
+        const clickX = e.offsetX;
+        const width = this.clientWidth;
+        audio.currentTime = (clickX / width) * audio.duration;
+    }
+});
+
+// Обработчик окончания трека
+audio.addEventListener('ended', function() {
+    isPlaying = false;
+    document.getElementById('play-pause-icon').src = 
+        '{% static "music_app/images/play_logo.png" %}';
+    clearInterval(updateInterval);
+});
 
 
 

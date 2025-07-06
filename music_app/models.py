@@ -4,8 +4,8 @@ class Album(models.Model):
     title = models.CharField(max_length=255)
     artist = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    tracks = models.TextField()  # "Track 1, Track 2, Track 3"
-    duration = models.CharField(max_length=10, blank=True)  # Убедитесь, что имя совпадает с БД
+    tracks = models.TextField()  # "Track 1, Track 2"
+    duration = models.TextField(blank=True)  # "3:42, 4:15"  ← ОБРАТИТЕ ВНИМАНИЕ: БЕЗ 's'!
 
     def get_cover_path(self):
         return f"music_app/images/{self.title.replace(' ', '_')}.jpg"
@@ -14,6 +14,6 @@ class Album(models.Model):
         return [t.strip() for t in self.tracks.split(',')]
 
     def get_durations_list(self):
-        return [d.strip() for d in self.durations.split(',')] if self.durations else []
+        return [d.strip() for d in self.duration.split(',')] if self.duration else []  # ← Используем duration (без 's')
 
 

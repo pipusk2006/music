@@ -38,7 +38,7 @@
                  "cover": "{% static album.get_cover_path %}",
                  "tracks": [
                      {% for track in album.get_track_list %}
-                     {"name": "{{ track|escapejs }}", "duration": "{{ album.get_durations_list.forloop.counter0|default:'' }}"}
+                     {"name": "{{ track|escapejs }}", "duration": "{{ album.get_durations_list|default:''|slice:forloop.counter0|first }}"}
                      {% if not forloop.last %},{% endif %}
                      {% endfor %}
                  ]

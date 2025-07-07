@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Album</title>
+    <link rel="stylesheet" href="{% static 'music_app/css/style.css' %}">
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .upload-form {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+        }
+
+        .upload-form h2 {
+            margin-bottom: 25px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .upload-form label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .upload-form input[type="text"],
+        .upload-form textarea,
+        .upload-form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: none;
+            background-color: #333;
+            color: white;
+        }
+
+        .track-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        .track-table th, .track-table td {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+        }
+
+        .add-btn {
+            margin-top: 15px;
+            background-color: #2d89ef;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            margin-top: 30px;
+            background-color: #28a745;
+            border: none;
+            padding: 12px 30px;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+        <h2>Upload New Album</h2>
+
+        <label for="id_title">Album Title:</label>
+        <input type="text" name="title" id="id_title" required>
+
+        <label for="id_artist">Artist:</label>
+        <input type="text" name="artist" id="id_artist" required>
+
+        <label for="id_description">Description:</label>
+        <textarea name="description" id="id_description" rows="3"></textarea>
+
+        <label for="id_cover">Cover (.jpg):</label>
+        <input type="file" name="cover" id="id_cover" accept="image/jpeg" required>
+
+        <table class="track-table" id="tracks-table">
+            <thead>
+                <tr>
+                    <th>Track Title</th>
+                    <th>MP3 File</th>
+                </tr>
+            </thead>
+            <tbody id="track-rows">
+                <tr>
+                    <td><input type="text" name="track_title_0" required></td>
+                    <td><input type="file" name="track_file_0" accept=".mp3" required></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" class="add-btn" onclick="addTrackRow()">Add +</button>
+
+        <input type="hidden" name="total_tracks" id="total_tracks" value="1">
+        <button type="submit" class="submit-btn">Upload Album</button>
+    </form>
+
+    <script>
+        let trackCount = 1;
+
+        function addTrackRow() {
+            const table = document.getElementById('track-rows');
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td><input type="text" name="track_title_${trackCount}" required></td>
+                <td><input type="file" name="track_file_${trackCount}" accept=".mp3" required></td>
+            `;
+
+            table.appendChild(row);
+            trackCount++;
+            document.getElementById('total_tracks').value = trackCount;
+        }
+    </script>
+</body>
+</html>
+

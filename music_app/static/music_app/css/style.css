@@ -307,7 +307,30 @@ a:hover {
 
 .time-info {
     display: flex;
-    justify-content:
 }
+
+.account-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upload-link {
+    color: white;
+    background-color: #2d89ef;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.upload-link:hover {
+    background-color: #1b5fbd;
+}
+
+
 
 

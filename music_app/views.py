@@ -6,8 +6,11 @@ from .models import UserProfile
 from django.utils.crypto import get_random_string
 from django.contrib import messages
 from django.core.mail import send_mail
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import make_password, check_password
+from .utils.upload_to_s3 import upload_to_s3
+from .utils.upload_to_s3 import upload_to_s3
+from mutagen.mp3 import MP3
+import math
 
 
 def account_view(request):
@@ -155,6 +158,67 @@ def toggle_favorite(request):
             fav.delete()
             return JsonResponse({'status': 'removed'})
         return JsonResponse({'status': 'added'})
+
+
+
+
+def format_duration(seconds):
+    """Преобразует секунды в формат MM:SS"""
+    minutes = math.floor(seconds // 60)
+    secs = math.floor(seconds % 60)
+    return f"{minutes}:{secs:02}"
+
+
+@login_required
+def upload_album_view(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        artist = request.POST.get('artist')
+        description = request.POST.get('description', '')
+        total_tracks = int(request.POST.get('total_tracks', 0))
+
+        track_titles = []
+        track_durations = []
+
+        for i in range(total_tracks):
+            track_title = request.POST.get(f'track_title_{i}', '').strip()
+            mp3_file = request.FILES.get(f'track_file_{i}')
+            if track_title and mp3_file:
+                track_titles.append(track_title)
+
+                # Получаем длительность через mutagen
+                audio = MP3(mp3_file)
+                duration_sec = audio.info.length
+                duration_str = format_duration(duration_sec)
+                track_durations.append(duration_str)
+
+        # Сохраняем текстовые данные в базу
+        album = Album.objects.create(
+            title=title,
+            artist=artist,
+            description=description,
+            tracks=", ".join(track_titles),
+            duration=", ".join(track_durations),
+        )
+
+        # Загрузка обложки
+        cover_file = request.FILES.get('cover')
+        if cover_file:
+            cover_path = f"{title.replace(' ', '_')}/cover.jpg"
+            upload_to_s3(cover_file, cover_path)
+
+        # Загрузка MP3-файлов
+        for i in range(total_tracks):
+            mp3_file = request.FILES.get(f'track_file_{i}')
+            if mp3_file:
+                filename = mp3_file.name.replace(' ', '_')
+                s3_path = f"{title.replace(' ', '_')}/{filename}"
+                upload_to_s3(mp3_file, s3_path)
+
+        return redirect('account')
+
+    return render(request, 'upload.html')
+
 
 
 

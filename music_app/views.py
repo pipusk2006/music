@@ -233,7 +233,7 @@ def upload_album_view(request):
 
         return redirect('account')
 
-    return render(request, 'upload.html')
+    return render(request, 'music_app/upload.html')
 
 
 

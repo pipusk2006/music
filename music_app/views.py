@@ -147,17 +147,28 @@ from django.http import JsonResponse
 from .models import Album, FavoriteAlbum
 from django.contrib.auth.decorators import login_required
 
-@login_required
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt  # если используешь JS fetch без csrf-token
 def toggle_favorite(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return JsonResponse({'error': 'Not authenticated'}, status=403)
+
     if request.method == "POST":
         album_id = request.POST.get('album_id')
-        album = Album.objects.get(id=album_id)
-        fav, created = FavoriteAlbum.objects.get_or_create(user=request.user, album=album)
+        album = get_object_or_404(Album, id=album_id)
+        user = get_object_or_404(UserProfile, id=user_id)
+
+        fav, created = FavoriteAlbum.objects.get_or_create(user=user, album=album)
 
         if not created:
             fav.delete()
             return JsonResponse({'status': 'removed'})
         return JsonResponse({'status': 'added'})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 
 
@@ -169,8 +180,13 @@ def format_duration(seconds):
     return f"{minutes}:{secs:02}"
 
 
-@login_required
 def upload_album_view(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+
+    user = get_object_or_404(UserProfile, id=user_id)
+
     if request.method == 'POST':
         title = request.POST.get('title')
         artist = request.POST.get('artist')
@@ -186,13 +202,13 @@ def upload_album_view(request):
             if track_title and mp3_file:
                 track_titles.append(track_title)
 
-                # Получаем длительность через mutagen
+                # Длительность через mutagen
                 audio = MP3(mp3_file)
                 duration_sec = audio.info.length
                 duration_str = format_duration(duration_sec)
                 track_durations.append(duration_str)
 
-        # Сохраняем текстовые данные в базу
+        # Сохраняем альбом
         album = Album.objects.create(
             title=title,
             artist=artist,
@@ -201,13 +217,13 @@ def upload_album_view(request):
             duration=", ".join(track_durations),
         )
 
-        # Загрузка обложки
+        # Обложка
         cover_file = request.FILES.get('cover')
         if cover_file:
             cover_path = f"{title.replace(' ', '_')}/cover.jpg"
             upload_to_s3(cover_file, cover_path)
 
-        # Загрузка MP3-файлов
+        # MP3-файлы
         for i in range(total_tracks):
             mp3_file = request.FILES.get(f'track_file_{i}')
             if mp3_file:
@@ -218,6 +234,7 @@ def upload_album_view(request):
         return redirect('account')
 
     return render(request, 'upload.html')
+
 
 
 

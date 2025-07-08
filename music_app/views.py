@@ -59,13 +59,14 @@ def home_view(request):
             'tracks': album.tracks,
             'durations': album.duration
         }
-        album.serialized = escapejs(json.dumps(serialized_data))
+        album.serialized = json.dumps(serialized_data)
 
     return render(request, 'music_app/home.html', {
         'albums': albums,
         'user': user,
         'fav_album_ids': fav_album_ids
     })
+
 
 
 def account_view(request):

@@ -30,7 +30,10 @@
 <main>
     <div class="album-list">
         {% for album in albums %}
-        <div class="album-card compact">
+        <div class="album-card compact"
+             onclick="toggleAlbum(this)"
+             data-album='{{ album.serialized|safe }}'>
+
             <img src="{{ album.cover_url }}" alt="{{ album.title }}" class="album-cover"
                  onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">
             <div class="album-info">
@@ -38,10 +41,9 @@
                 <p>{{ album.artist }}</p>
             </div>
 
-            <!-- Треки -->
             <div class="track-buttons">
                 {% for track in album.track_data %}
-                    <button onclick="playTrack(
+                    <button onclick="event.stopPropagation(); playTrack(
                         '{{ track.name|escapejs }}',
                         '{{ album.artist|escapejs }}',
                         '{{ track.url|escapejs }}',
@@ -52,26 +54,24 @@
                 {% endfor %}
             </div>
 
-            <!-- Кнопка избранного -->
             {% if album.id in fav_album_ids %}
                 <img src="{% static 'music_app/images/fav_2.jpg' %}"
                      class="fav-toggle"
                      data-fav="true"
                      data-album-id="{{ album.id }}"
-                     onclick="toggleFavorite(this)">
+                     onclick="event.stopPropagation(); toggleFavorite(this)">
             {% else %}
                 <img src="{% static 'music_app/images/fav_1.jpg' %}"
                      class="fav-toggle"
                      data-fav="false"
                      data-album-id="{{ album.id }}"
-                     onclick="toggleFavorite(this)">
+                     onclick="event.stopPropagation(); toggleFavorite(this)">
             {% endif %}
         </div>
         {% endfor %}
     </div>
 </main>
 
-<!-- ✅ Плеер -->
 <div id="player" class="music-player hidden">
     <div class="player-controls">
         <button class="control-btn" onclick="skipBackward()">

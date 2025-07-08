@@ -176,7 +176,7 @@ def toggle_favorite(request):
             return JsonResponse({'status': 'removed'})
         return JsonResponse({'status': 'added'})
 
-    return JsonResponse({'error': 'Invalid request'}, status=400))
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def upload_album_view(request):
@@ -233,6 +233,7 @@ def upload_album_view(request):
         return redirect('account')
 
     return render(request, 'music_app/upload.html')
+
 
 
 

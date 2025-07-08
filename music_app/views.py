@@ -61,8 +61,8 @@ def home_view(request):
     return render(request, 'music_app/home.html', {
         'albums': albums,
         'user': user,
-        'fav_album_ids': fav_album_ids,
-    }))
+        'fav_album_ids': fav_album_ids
+    })
 
 
 def account_view(request):
@@ -162,13 +162,13 @@ def check_email(request):
 @csrf_exempt
 def toggle_favorite(request):
     user_id = request.session.get('user_id')
-    if not user_id:
-        return JsonResponse({'error': 'Not authenticated'}, status=403)
+    if not user_id or not str(user_id).isdigit():
+        return JsonResponse({'error': 'Invalid user ID'}, status=400)
 
     if request.method == "POST":
         album_id = request.POST.get('album_id')
         album = get_object_or_404(Album, id=album_id)
-        user = get_object_or_404(UserProfile, id=user_id)
+        user = get_object_or_404(UserProfile, id=int(user_id))
 
         fav, created = FavoriteAlbum.objects.get_or_create(user=user, album=album)
         if not created:
@@ -176,7 +176,7 @@ def toggle_favorite(request):
             return JsonResponse({'status': 'removed'})
         return JsonResponse({'status': 'added'})
 
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=400))
 
 
 def upload_album_view(request):
@@ -233,5 +233,6 @@ def upload_album_view(request):
         return redirect('account')
 
     return render(request, 'music_app/upload.html')
+
 
 

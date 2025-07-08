@@ -28,12 +28,14 @@ def home_view(request):
     user = None
     fav_album_ids = []
 
-    if request.session.get('user_id'):
+    user_id = request.session.get('user_id')
+    if user_id and str(user_id).isdigit():
         try:
-            user = UserProfile.objects.get(id=request.session['user_id'])
+            user = UserProfile.objects.get(id=int(user_id))
             fav_album_ids = list(FavoriteAlbum.objects.filter(user=user).values_list('album_id', flat=True))
         except UserProfile.DoesNotExist:
             user = None
+
 
     for album in albums:
         folder = album.title.replace(' ', '_')

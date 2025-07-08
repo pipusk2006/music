@@ -33,28 +33,28 @@ def home_view(request):
             user = None
 
     for album in albums:
-        album.cover_url = static(album.get_cover_path())
+        base_url = "https://s3.timeweb.cloud/2cc4fb86-neobinaural"
+        folder = album.title.replace(" ", "_")
 
+        # Обложка
+        album.cover_url = f"{base_url}/{folder}/cover.jpg"
+
+        # Треки и длительности
         track_names = album.get_track_list()
-        track_urls = album.get_s3_track_urls()
         durations = album.get_durations_list()
-
         album.track_data = [
             {
-                'name': name,
-                'url': url,
-                'duration': durations[i] if i < len(durations) else ''
+                "name": name,
+                "url": f"{base_url}/{folder}/{name.replace(' ', '_')}.mp3",
+                "duration": durations[i] if i < len(durations) else ''
             }
-            for i, (name, url) in enumerate(zip(track_names, track_urls))
+            for i, name in enumerate(track_names)
         ]
 
     return render(request, 'music_app/home.html', {
         'albums': albums,
         'user': user
     })
-
-
-
 
 
 def login_view(request):
@@ -80,8 +80,6 @@ def login_view(request):
             return render(request, 'music_app/login.html')
 
     return render(request, 'music_app/login.html')
-
-
 
 def registration_view(request):
     if request.method == 'POST':

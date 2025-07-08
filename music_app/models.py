@@ -39,7 +39,7 @@ class Album(models.Model):
 
 
 class FavoriteAlbum(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
     class Meta:

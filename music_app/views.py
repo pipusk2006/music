@@ -31,10 +31,10 @@ def home_view(request):
     user_id = request.session.get('user_id')
     if user_id and str(user_id).isdigit():
         try:
-                user = UserProfile.objects.get(id=int(user_id))
+            user = UserProfile.objects.get(id=int(user_id))
             fav_album_ids = list(FavoriteAlbum.objects.filter(user=user).values_list('album_id', flat=True))
-                except UserProfile.DoesNotExist:
-                        user = None
+        except UserProfile.DoesNotExist:
+            user = None
     else:
         if 'user_id' in request.session:
             del request.session['user_id']

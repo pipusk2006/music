@@ -11,9 +11,7 @@
 
 <header class="site-header">
     <div class="header-left">
-        <a href="/">
-            <img src="{% static 'music_app/images/logo.jpg' %}" alt="Logo" class="logo clickable-logo">
-        </a>
+        <a href="/"><img src="{% static 'music_app/images/logo.jpg' %}" alt="Logo" class="logo clickable-logo"></a>
     </div>
 
     <div class="header-center">
@@ -32,22 +30,26 @@
 <main>
     <div class="album-list">
         {% for album in albums %}
-        <div class="album-card compact" 
-             data-album='{
-                 "title": "{{ album.title|escapejs }}",
-                 "artist": "{{ album.artist|escapejs }}",
-                 "description": "{{ album.description|escapejs }}",
-                 "cover": "{{ album.cover_url }}",
-                 "tracks": "{{ album.tracks|escapejs }}",
-                 "durations": "{{ album.duration|default:""|escapejs }}"
-             }'>
-            <img src="{{ album.cover_url }}" 
-                 alt="{{ album.title }}" 
-                 class="album-cover"
+        <div class="album-card compact">
+            <img src="{{ album.cover_url }}" alt="{{ album.title }}" class="album-cover"
                  onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">
             <div class="album-info">
                 <h2>{{ album.title }}</h2>
                 <p>{{ album.artist }}</p>
+            </div>
+
+            <!-- Треки -->
+            <div class="track-buttons">
+                {% for track in album.track_data %}
+                    <button onclick="playTrack(
+                        '{{ track.name|escapejs }}',
+                        '{{ album.artist|escapejs }}',
+                        '{{ track.url|escapejs }}',
+                        '{{ album.cover_url|escapejs }}'
+                    )">
+                        ▶ {{ track.name }}
+                    </button>
+                {% endfor %}
             </div>
 
             <!-- Кнопка избранного -->
@@ -69,7 +71,7 @@
     </div>
 </main>
 
-<!-- ✅ Новый плеер -->
+<!-- ✅ Плеер -->
 <div id="player" class="music-player hidden">
     <div class="player-controls">
         <button class="control-btn" onclick="skipBackward()">
@@ -82,17 +84,17 @@
             <img src="{% static 'music_app/images/forward_logo.png' %}" alt="Forward">
         </button>
     </div>
-    
+
     <img class="player-cover" src="" alt="Album Cover">
-    
+
     <div class="player-info">
         <h3 id="player-title">Track Title</h3>
         <p id="player-artist">Artist</p>
-        
+
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
-        
+
         <div class="time-info">
             <span id="current-time">0:00</span>
             <span id="total-time">0:00</span>
@@ -102,17 +104,9 @@
     <audio></audio>
 </div>
 
-<!-- конец страницы -->
 <script>
-    document.querySelectorAll('.album-card').forEach(card => {
-        card.addEventListener('click', function () {
-            toggleAlbum(this);
-        });
-    });
-
     function toggleFavorite(icon) {
         const albumId = icon.dataset.albumId;
-
         fetch("{% url 'toggle_favorite' %}", {
             method: "POST",
             headers: {
@@ -138,10 +132,13 @@
     const ICON_PLAY = "{% static 'music_app/images/play_logo.png' %}";
     const ICON_PAUSE = "{% static 'music_app/images/pause_logo.png' %}";
 </script>
-<script src="{% static 'music_app/js/player.js' %}"></script>
-<script src="{% static 'music_app/js/expand.js' %}"></script>
+
+<script src="{% static 'music_app/js/player.js' %}?v=2"></script>
+<script src="{% static 'music_app/js/expand.js' %}?v=2"></script>
+
 </body>
 </html>
+
 
 
 

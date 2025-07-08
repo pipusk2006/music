@@ -102,6 +102,7 @@
     <audio></audio>
 </div>
 
+<!-- конец страницы -->
 <script>
     document.querySelectorAll('.album-card').forEach(card => {
         card.addEventListener('click', function () {
@@ -133,22 +134,14 @@
     }
 </script>
 
+<script>
+    const ICON_PLAY = "{% static 'music_app/images/play_logo.png' %}";
+    const ICON_PAUSE = "{% static 'music_app/images/pause_logo.png' %}";
+</script>
 <script src="{% static 'music_app/js/player.js' %}"></script>
 <script src="{% static 'music_app/js/expand.js' %}"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

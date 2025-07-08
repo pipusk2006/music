@@ -3,25 +3,20 @@ let isPlaying = false;
 let updateInterval;
 
 function playTrack(title, artist, url, cover) {
-    // Останавливаем текущее воспроизведение
     audio.pause();
     clearInterval(updateInterval);
-    
-    // Устанавливаем новые данные
+
     audio.src = url;
     document.querySelector('.player-cover').src = cover;
     document.getElementById('player-title').textContent = title;
     document.getElementById('player-artist').textContent = artist;
-    
-    // Показываем плеер
+
     document.getElementById('player').classList.remove('hidden');
-    
-    // Начинаем воспроизведение
+
     audio.play()
         .then(() => {
             isPlaying = true;
-            document.getElementById('play-pause-icon').src = 
-                '{% static "music_app/images/pause_logo.png" %}';
+            document.getElementById('play-pause-icon').src = ICON_PAUSE;
             startProgressUpdate();
         })
         .catch(e => console.error('Playback failed:', e));
@@ -31,12 +26,10 @@ function togglePlay() {
     if (audio.src) {
         if (isPlaying) {
             audio.pause();
-            document.getElementById('play-pause-icon').src = 
-                '{% static "music_app/images/play_logo.png" %}';
+            document.getElementById('play-pause-icon').src = ICON_PLAY;
         } else {
             audio.play();
-            document.getElementById('play-pause-icon').src = 
-                '{% static "music_app/images/pause_logo.png" %}';
+            document.getElementById('play-pause-icon').src = ICON_PAUSE;
             startProgressUpdate();
         }
         isPlaying = !isPlaying;
@@ -61,11 +54,8 @@ function updateProgress() {
     if (audio.duration) {
         const percent = (audio.currentTime / audio.duration) * 100;
         document.getElementById('progress-bar').style.width = percent + '%';
-        
-        document.getElementById('current-time').textContent = 
-            formatTime(audio.currentTime);
-        document.getElementById('total-time').textContent = 
-            formatTime(audio.duration);
+        document.getElementById('current-time').textContent = formatTime(audio.currentTime);
+        document.getElementById('total-time').textContent = formatTime(audio.duration);
     }
 }
 
@@ -75,7 +65,6 @@ function formatTime(seconds) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-// Обработчик клика по прогресс-бару
 document.querySelector('.progress-container').addEventListener('click', function(e) {
     if (audio.duration) {
         const clickX = e.offsetX;
@@ -84,13 +73,12 @@ document.querySelector('.progress-container').addEventListener('click', function
     }
 });
 
-// Обработчик окончания трека
 audio.addEventListener('ended', function() {
     isPlaying = false;
-    document.getElementById('play-pause-icon').src = 
-        '{% static "music_app/images/play_logo.png" %}';
+    document.getElementById('play-pause-icon').src = ICON_PLAY;
     clearInterval(updateInterval);
 });
+
 
 
 

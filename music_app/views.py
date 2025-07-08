@@ -33,11 +33,16 @@ def home_view(request):
             user = None
 
     for album in albums:
-        album.cover_url = static(album.get_cover_path())
+        album_title_s3 = album.title.replace(' ', '_')
+
+        # Обложка тоже с S3
+        album.cover_url = f"https://s3.timeweb.com/your-bucket-name/{album_title_s3}/cover.jpg"
+
+        # mp3 ссылки на S3
         album.track_data = [
             {
                 'name': track.strip(),
-                'url': static(f'music_app/records/{track.strip().replace(" ", "_")}.mp3')
+                'url': f"https://s3.timeweb.com/your-bucket-name/{album_title_s3}/{track.strip().replace(' ', '_')}.mp3"
             }
             for track in album.get_track_list()
         ]
@@ -46,6 +51,7 @@ def home_view(request):
         'albums': albums,
         'user': user
     })
+
 
 
 

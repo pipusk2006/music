@@ -12,12 +12,13 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.login
 
+
 class Album(models.Model):
     title = models.CharField(max_length=255)
     artist = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     tracks = models.TextField()  # "Track 1, Track 2"
-    duration = models.TextField(blank=True)  # "3:42, 4:15"  ← ОБРАТИТЕ ВНИМАНИЕ: БЕЗ 's'!
+    duration = models.TextField(blank=True)  # "3:42, 4:15"
 
     def get_cover_path(self):
         return f"music_app/images/{self.title.replace(' ', '_')}.jpg"
@@ -26,7 +27,15 @@ class Album(models.Model):
         return [t.strip() for t in self.tracks.split(',')]
 
     def get_durations_list(self):
-        return [d.strip() for d in self.duration.split(',')] if self.duration else []  # ← Используем duration (без 's')
+        return [d.strip() for d in self.duration.split(',')] if self.duration else []
+
+    def get_s3_track_urls(self):
+        base_url = "https://s3.timeweb.cloud/2cc4fb86-neobinaural"
+        folder = self.title.replace(" ", "_")
+        return [
+            f"{base_url}/{folder}/{track.strip().replace(' ', '_')}.mp3"
+            for track in self.get_track_list()
+        ]
 
 
 class FavoriteAlbum(models.Model):
@@ -35,6 +44,7 @@ class FavoriteAlbum(models.Model):
 
     class Meta:
         unique_together = ('user', 'album')
+
 
 
 

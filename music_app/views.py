@@ -33,24 +33,26 @@ def home_view(request):
             user = None
 
     for album in albums:
-        album_title_s3 = album.title.replace(' ', '_')
+        album.cover_url = static(album.get_cover_path())
 
-        # Обложка тоже с S3
-        album.cover_url = f"https://s3.timeweb.com/your-bucket-name/{album_title_s3}/cover.jpg"
+        track_names = album.get_track_list()
+        track_urls = album.get_s3_track_urls()
+        durations = album.get_durations_list()
 
-        # mp3 ссылки на S3
         album.track_data = [
             {
-                'name': track.strip(),
-                'url': f"https://s3.timeweb.com/your-bucket-name/{album_title_s3}/{track.strip().replace(' ', '_')}.mp3"
+                'name': name,
+                'url': url,
+                'duration': durations[i] if i < len(durations) else ''
             }
-            for track in album.get_track_list()
+            for i, (name, url) in enumerate(zip(track_names, track_urls))
         ]
 
     return render(request, 'music_app/home.html', {
         'albums': albums,
         'user': user
     })
+
 
 
 

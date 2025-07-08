@@ -31,13 +31,13 @@ def home_view(request):
     user_id = request.session.get('user_id')
     if user_id and str(user_id).isdigit():
         try:
-            if isinstance(user_id, str) and not user_id.isdigit():
-                user = None
-            else:
                 user = UserProfile.objects.get(id=int(user_id))
             fav_album_ids = list(FavoriteAlbum.objects.filter(user=user).values_list('album_id', flat=True))
-        except UserProfile.DoesNotExist:
-            user = None
+                except UserProfile.DoesNotExist:
+                        user = None
+    else:
+        if 'user_id' in request.session:
+            del request.session['user_id']
 
     for album in albums:
         folder = album.title.replace(' ', '_')
@@ -236,6 +236,7 @@ def upload_album_view(request):
         return redirect('account')
 
     return render(request, 'music_app/upload.html')
+
 
 
 

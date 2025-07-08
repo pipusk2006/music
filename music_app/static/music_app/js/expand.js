@@ -38,14 +38,14 @@ function resetCardContent(card) {
 }
 
 function renderExpandedCard(card, albumData) {
-    const tracks = albumData.tracks.split(',').map(t => t.trim());
+    const tracks = albumData.tracks_data || [];
     const durations = albumData.durations ? albumData.durations.split(',').map(d => d.trim()) : [];
-    
+
     card.innerHTML = `
         <div class="album-cover-container">
             <img src="${albumData.cover}" 
                  class="album-cover"
-                 onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">
+                 onerror="this.src='/static/music_app/images/default_cover.jpg'">
         </div>
         <div class="album-content">
             <div class="album-info">
@@ -54,14 +54,14 @@ function renderExpandedCard(card, albumData) {
             </div>
             <p class="album-description">${albumData.description}</p>
             <ul class="tracklist">
-                ${tracks.map((track, i) => `
+                ${tracks.map((trackObj, i) => `
                     <li onclick="event.stopPropagation(); playTrack(
-                        '${track}',
+                        '${trackObj.name}',
                         '${albumData.artist}',
-                        '/static/music_app/records/${track.replace(/\s+/g, '_')}.mp3',
+                        '${trackObj.url}',
                         '${albumData.cover}'
                     )">
-                        <span class="track-name">${track}</span>
+                        <span class="track-name">${trackObj.name}</span>
                         <span class="duration">${durations[i] || ''}</span>
                     </li>
                 `).join('')}
@@ -69,6 +69,7 @@ function renderExpandedCard(card, albumData) {
         </div>
     `;
 }
+
 
 
 

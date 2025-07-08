@@ -43,21 +43,25 @@ def home_view(request):
         folder = album.title.replace(' ', '_')
         album.cover_url = f"{settings.S3_PUBLIC_URL_PREFIX}/{folder}/cover.jpg"
 
+        track_names = album.get_track_list()
+        track_durations = album.get_durations_list()
+
         album.track_data = [
             {
-                'name': track.strip(),
-                'url': f"{settings.S3_PUBLIC_URL_PREFIX}/{folder}/{track.strip().replace(' ', '_')}.mp3"
+                'name': track,
+                'url': f"{settings.S3_PUBLIC_URL_PREFIX}/{folder}/{track.replace(' ', '_')}.mp3"
             }
-            for track in album.get_track_list()
+            for track in track_names
         ]
 
+        # сериализуем данные для expand.js
         serialized_data = {
             'title': album.title,
             'artist': album.artist,
             'description': album.description,
             'cover': album.cover_url,
-            'tracks': album.tracks,
-            'durations': album.duration
+            'durations': album.duration,
+            'tracks_data': album.track_data,
         }
         album.serialized = json.dumps(serialized_data)
 
@@ -66,6 +70,7 @@ def home_view(request):
         'user': user,
         'fav_album_ids': fav_album_ids
     })
+
 
 
 

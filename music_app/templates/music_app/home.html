@@ -32,7 +32,7 @@
         {% for album in albums %}
         <div class="album-card compact"
              onclick="toggleAlbum(this)"
-             data-album='{{ album.serialized|escapejs }}'>
+             data-album="{{ album.serialized|escape }}">
 
             <img src="{{ album.cover_url }}" alt="{{ album.title }}" class="album-cover"
                  onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">

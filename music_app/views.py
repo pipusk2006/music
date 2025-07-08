@@ -36,7 +36,6 @@ def home_view(request):
         except UserProfile.DoesNotExist:
             user = None
 
-
     for album in albums:
         folder = album.title.replace(' ', '_')
         album.cover_url = f"{settings.S3_PUBLIC_URL_PREFIX}/{folder}/cover.jpg"
@@ -63,7 +62,7 @@ def home_view(request):
         'albums': albums,
         'user': user,
         'fav_album_ids': fav_album_ids,
-    })
+    }))
 
 
 def account_view(request):
@@ -234,4 +233,5 @@ def upload_album_view(request):
         return redirect('account')
 
     return render(request, 'music_app/upload.html')
+
 

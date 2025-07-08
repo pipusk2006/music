@@ -33,28 +33,25 @@ def home_view(request):
             user = None
 
     for album in albums:
-        base_url = "https://s3.timeweb.cloud/2cc4fb86-neobinaural"
-        folder = album.title.replace(" ", "_")
+        # обложка остаётся через static (если ты туда заливаешь jpg как раньше)
+        album.cover_url = static(album.get_cover_path())
 
-        # Обложка
-        album.cover_url = f"{base_url}/{folder}/cover.jpg"
+        folder = album.title.replace(' ', '_')
 
-        # Треки и длительности
-        track_names = album.get_track_list()
-        durations = album.get_durations_list()
+        # ссылки на mp3 теперь из S3
         album.track_data = [
             {
-                "name": name,
-                "url": f"{base_url}/{folder}/{name.replace(' ', '_')}.mp3",
-                "duration": durations[i] if i < len(durations) else ''
+                'name': track.strip(),
+                'url': f"{settings.S3_PUBLIC_URL_PREFIX}/{folder}/{track.strip().replace(' ', '_')}.mp3"
             }
-            for i, name in enumerate(track_names)
+            for track in album.get_track_list()
         ]
 
     return render(request, 'music_app/home.html', {
         'albums': albums,
         'user': user
     })
+
 
 
 def login_view(request):
@@ -186,6 +183,11 @@ def format_duration(seconds):
     return f"{minutes}:{secs:02}"
 
 
+from .utils.upload_to_s3 import upload_to_s3
+from django.conf import settings
+from mutagen.mp3 import MP3
+import math
+
 def upload_album_view(request):
     user_id = request.session.get('user_id')
     if not user_id:
@@ -202,19 +204,25 @@ def upload_album_view(request):
         track_titles = []
         track_durations = []
 
+        folder = title.replace(' ', '_')
+
         for i in range(total_tracks):
             track_title = request.POST.get(f'track_title_{i}', '').strip()
             mp3_file = request.FILES.get(f'track_file_{i}')
             if track_title and mp3_file:
                 track_titles.append(track_title)
 
-                # Длительность через mutagen
+                # вычисляем длительность
                 audio = MP3(mp3_file)
                 duration_sec = audio.info.length
                 duration_str = format_duration(duration_sec)
                 track_durations.append(duration_str)
 
-        # Сохраняем альбом
+                # заливаем на S3
+                filename = f"{folder}/{track_title.replace(' ', '_')}.mp3"
+                upload_to_s3(mp3_file, filename)
+
+        # сохраняем альбом в БД
         album = Album.objects.create(
             title=title,
             artist=artist,
@@ -223,23 +231,16 @@ def upload_album_view(request):
             duration=", ".join(track_durations),
         )
 
-        # Обложка
+        # обложка
         cover_file = request.FILES.get('cover')
         if cover_file:
-            cover_path = f"{title.replace(' ', '_')}/cover.jpg"
+            cover_path = f"{folder}/cover.jpg"
             upload_to_s3(cover_file, cover_path)
-
-        # MP3-файлы
-        for i in range(total_tracks):
-            mp3_file = request.FILES.get(f'track_file_{i}')
-            if mp3_file:
-                filename = mp3_file.name.replace(' ', '_')
-                s3_path = f"{title.replace(' ', '_')}/{filename}"
-                upload_to_s3(mp3_file, s3_path)
 
         return redirect('account')
 
     return render(request, 'music_app/upload.html')
+
 
 
 

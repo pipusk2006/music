@@ -179,17 +179,17 @@ def toggle_favorite(request):
 
 
 
+from .utils.upload_to_s3 import upload_to_s3
+from django.conf import settings
+from mutagen.mp3 import MP3
+from io import BytesIO
+import math
+
 def format_duration(seconds):
     """Преобразует секунды в формат MM:SS"""
     minutes = math.floor(seconds // 60)
     secs = math.floor(seconds % 60)
     return f"{minutes}:{secs:02}"
-
-
-from .utils.upload_to_s3 import upload_to_s3
-from django.conf import settings
-from mutagen.mp3 import MP3
-import math
 
 def upload_album_view(request):
     user_id = request.session.get('user_id')
@@ -212,20 +212,32 @@ def upload_album_view(request):
         for i in range(total_tracks):
             track_title = request.POST.get(f'track_title_{i}', '').strip()
             mp3_file = request.FILES.get(f'track_file_{i}')
+
             if track_title and mp3_file:
                 track_titles.append(track_title)
 
-                # вычисляем длительность
-                audio = MP3(mp3_file)
-                duration_sec = audio.info.length
-                duration_str = format_duration(duration_sec)
+                # ✅ Читаем mp3-файл в буфер, чтобы можно было прочитать дважды
+                mp3_data = mp3_file.read()
+                mp3_buffer = BytesIO(mp3_data)
+
+                # ✅ Определяем длительность
+                try:
+                    audio = MP3(mp3_buffer)
+                    duration_sec = audio.info.length
+                    duration_str = format_duration(duration_sec)
+                except Exception as e:
+                    print(f"❌ Ошибка чтения MP3: {e}")
+                    duration_str = "0:00"
+
                 track_durations.append(duration_str)
 
-                # заливаем на S3
-                filename = f"{folder}/{track_title.replace(' ', '_')}.mp3"
-                upload_to_s3(mp3_file, filename)
+                # ✅ Перематываем буфер перед загрузкой
+                mp3_buffer.seek(0)
 
-        # сохраняем альбом в БД
+                filename = f"{folder}/{track_title.replace(' ', '_')}.mp3"
+                upload_to_s3(mp3_buffer, filename)
+
+        # ✅ Сохраняем альбом в базу данных
         album = Album.objects.create(
             title=title,
             artist=artist,
@@ -234,7 +246,7 @@ def upload_album_view(request):
             duration=", ".join(track_durations),
         )
 
-        # обложка
+        # ✅ Обложка
         cover_file = request.FILES.get('cover')
         if cover_file:
             cover_path = f"{folder}/cover.jpg"
@@ -243,13 +255,3 @@ def upload_album_view(request):
         return redirect('account')
 
     return render(request, 'music_app/upload.html')
-
-
-
-
-
-
-
-
-
-

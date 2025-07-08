@@ -22,6 +22,8 @@ def account_view(request):
     return render(request, 'music_app/account.html', {'user': user})
 
 
+from django.conf import settings
+
 def home_view(request):
     albums = Album.objects.all()
     user = None
@@ -33,12 +35,12 @@ def home_view(request):
             user = None
 
     for album in albums:
-        # обложка остаётся через static (если ты туда заливаешь jpg как раньше)
-        album.cover_url = static(album.get_cover_path())
-
         folder = album.title.replace(' ', '_')
 
-        # ссылки на mp3 теперь из S3
+        # ✅ теперь обложка тоже из S3
+        album.cover_url = f"{settings.S3_PUBLIC_URL_PREFIX}/{folder}/cover.jpg"
+
+        # ✅ треки из S3
         album.track_data = [
             {
                 'name': track.strip(),
@@ -51,6 +53,7 @@ def home_view(request):
         'albums': albums,
         'user': user
     })
+
 
 
 

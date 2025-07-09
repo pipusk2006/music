@@ -22,10 +22,10 @@
 
     <div class="header-right">
         {% if user.is_authenticated %}
-            <span class="account-text">Аккаунт</span>
-            <a href="{% url 'logout' %}" class="logout-text">Выйти</a>
+            <span class="account-text">Account</span>
+            <a href="{% url 'logout' %}" class="logout-text">Logout</a>
         {% else %}
-            <a href="{% url 'login' %}" class="login-link">Войти</a>
+            <a href="{% url 'login' %}" class="login-link">Login</a>
         {% endif %}
     </div>
 </header>

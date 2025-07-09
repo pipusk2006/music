@@ -17,7 +17,6 @@ urlpatterns = [
     path('verify/', verify_email_view, name='verify_email'),
     path('account/', account_view, name='account'),
     path('toggle_favorite/', toggle_favorite, name='toggle_favorite'),
-    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('upload/', upload_album_view, name='upload_album'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
 ]

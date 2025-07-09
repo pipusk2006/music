@@ -1,76 +1,51 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-    <meta charset="UTF-8">
-    <title>{% block title %}what?{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'music_app/css/style.css' %}">
-</head>
-<body>
 
-<header class="site-header">
-    <div class="header-left">
-        <a href="/"><img src="{% static 'music_app/images/logo.jpg' %}" alt="Logo" class="logo clickable-logo"></a>
-    </div>
+{% block title %}Главная{% endblock %}
 
-    <div class="header-center">
-        <input type="text" class="search-input" placeholder="что хочешь послушать?">
-    </div>
+{% block content %}
+<div class="album-list">
+    {% for album in albums %}
+    <div class="album-card compact"
+         onclick="toggleAlbum(this)"
+         data-album="{{ album.serialized|escape }}">
 
-    <div class="header-right">
-        {% if user %}
-            <a href="{% url 'account' %}" class="login-link">Account</a>
+        <img src="{{ album.cover_url }}" alt="{{ album.title }}" class="album-cover"
+             onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">
+        <div class="album-info">
+            <h2>{{ album.title }}</h2>
+            <p>{{ album.artist }}</p>
+        </div>
+
+        <div class="track-buttons">
+            {% for track in album.track_data %}
+                <button onclick="event.stopPropagation(); playTrack(
+                    '{{ track.name|escapejs }}',
+                    '{{ album.artist|escapejs }}',
+                    '{{ track.url|escapejs }}',
+                    '{{ album.cover_url|escapejs }}'
+                )">
+                    ▶ {{ track.name }}
+                </button>
+            {% endfor %}
+        </div>
+
+        {% if album.id in fav_album_ids %}
+            <img src="{% static 'music_app/images/fav_2.jpg' %}"
+                 class="fav-toggle"
+                 data-fav="true"
+                 data-album-id="{{ album.id }}"
+                 onclick="event.stopPropagation(); toggleFavorite(this)">
         {% else %}
-            <a href="{% url 'login' %}" class="login-link">Login</a>
+            <img src="{% static 'music_app/images/fav_1.jpg' %}"
+                 class="fav-toggle"
+                 data-fav="false"
+                 data-album-id="{{ album.id }}"
+                 onclick="event.stopPropagation(); toggleFavorite(this)">
         {% endif %}
     </div>
-</header>
-
-<main>
-    <div class="album-list">
-        {% for album in albums %}
-        <div class="album-card compact"
-             onclick="toggleAlbum(this)"
-             data-album="{{ album.serialized|escape }}">
-
-            <img src="{{ album.cover_url }}" alt="{{ album.title }}" class="album-cover"
-                 onerror="this.src='{% static 'music_app/images/default_cover.jpg' %}'">
-            <div class="album-info">
-                <h2>{{ album.title }}</h2>
-                <p>{{ album.artist }}</p>
-            </div>
-
-            <div class="track-buttons">
-                {% for track in album.track_data %}
-                    <button onclick="event.stopPropagation(); playTrack(
-                        '{{ track.name|escapejs }}',
-                        '{{ album.artist|escapejs }}',
-                        '{{ track.url|escapejs }}',
-                        '{{ album.cover_url|escapejs }}'
-                    )">
-                        ▶ {{ track.name }}
-                    </button>
-                {% endfor %}
-            </div>
-
-            {% if album.id in fav_album_ids %}
-                <img src="{% static 'music_app/images/fav_2.jpg' %}"
-                     class="fav-toggle"
-                     data-fav="true"
-                     data-album-id="{{ album.id }}"
-                     onclick="event.stopPropagation(); toggleFavorite(this)">
-            {% else %}
-                <img src="{% static 'music_app/images/fav_1.jpg' %}"
-                     class="fav-toggle"
-                     data-fav="false"
-                     data-album-id="{{ album.id }}"
-                     onclick="event.stopPropagation(); toggleFavorite(this)">
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
-</main>
+    {% endfor %}
+</div>
 
 <div id="player" class="music-player hidden">
     <div class="player-controls">
@@ -126,18 +101,12 @@
             }
         });
     }
-</script>
 
-<script>
     const ICON_PLAY = "{% static 'music_app/images/play_logo.png' %}";
     const ICON_PAUSE = "{% static 'music_app/images/pause_logo.png' %}";
 </script>
+{% endblock %}
 
-<script src="{% static 'music_app/js/player.js' %}?v=2"></script>
-<script src="{% static 'music_app/js/expand.js' %}?v=2"></script>
-
-</body>
-</html>
 
 
 

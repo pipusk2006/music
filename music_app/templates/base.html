@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Музыка{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'music_app/css/style.css' %}">
 </head>
 <body>
@@ -20,7 +21,12 @@
     </div>
 
     <div class="header-right">
-        <a href="/login/" class="login-link">Войти</a>
+        {% if user.is_authenticated %}
+            <span class="account-text">Аккаунт</span>
+            <a href="{% url 'logout' %}" class="logout-text">Выйти</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="login-link">Войти</a>
+        {% endif %}
     </div>
 </header>
 
@@ -33,5 +39,6 @@
 <script src="{% static 'music_app/js/player.js' %}"></script>
 </body>
 </html>
+
 
 

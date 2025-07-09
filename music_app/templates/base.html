@@ -21,7 +21,7 @@
     </div>
 
     <div class="header-right">
-        {% if user.is_authenticated %}
+        {% if request.session.user_id %}
             <span class="account-text">Account</span>
             <a href="{% url 'logout' %}" class="logout-text">Logout</a>
         {% else %}

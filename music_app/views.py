@@ -56,14 +56,16 @@ def home_view(request):
 
         # сериализуем данные для expand.js
         serialized_data = {
+            'id': album.id,
             'title': album.title,
             'artist': album.artist,
             'description': album.description,
             'cover': album.cover_url,
             'durations': album.duration,
             'tracks_data': album.track_data,
+            'is_favorite': album.id in fav_album_ids,
         }
-        album.serialized = json.dumps(serialized_data)
+
 
     return render(request, 'music_app/home.html', {
         'albums': albums,

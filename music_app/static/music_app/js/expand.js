@@ -40,13 +40,26 @@ function resetCardContent(card) {
 function renderExpandedCard(card, albumData) {
     const tracks = albumData.tracks_data || [];
     const durations = albumData.durations ? albumData.durations.split(',').map(d => d.trim()) : [];
+    const isFavorite = albumData.is_favorite;
 
     card.innerHTML = `
         <div class="album-cover-container">
             <img src="${albumData.cover}" 
                  class="album-cover"
                  onerror="this.src='/static/music_app/images/default_cover.jpg'">
+            
+            <div class="fav-control" 
+                 onclick="event.stopPropagation(); toggleFavVisual(this)" 
+                 data-album-id="${albumData.id}" 
+                 data-fav="${isFavorite}">
+                <div class="disc-icon"></div>
+                <div class="flash"></div>
+                <svg class="checkmark ${isFavorite ? '' : 'hidden'}" viewBox="0 0 52 52">
+                    <path d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
         </div>
+
         <div class="album-content">
             <div class="album-info">
                 <h2>${albumData.title}</h2>
@@ -69,13 +82,3 @@ function renderExpandedCard(card, albumData) {
         </div>
     `;
 }
-
-
-
-
-
-
-
-
-
-

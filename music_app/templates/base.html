@@ -22,7 +22,7 @@
 
     <div class="header-right">
         {% if request.session.user_id %}
-            <span class="account-text">Account</span>
+            <a href="{% url 'account' %}" class="account-text">Account</a>
             <a href="{% url 'logout' %}" class="logout-text">Logout</a>
         {% else %}
             <a href="{% url 'login' %}" class="login-link">Login</a>

@@ -331,6 +331,19 @@ a:hover {
     background-color: #1b5fbd;
 }
 
+.auth-link {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #89A1B7;
+    text-decoration: none;
+    margin-left: 12px;
+    transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+    color: #fff;
+}
 
 
 

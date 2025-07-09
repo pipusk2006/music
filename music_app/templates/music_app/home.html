@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Главная{% endblock %}
+{% block title %}Main{% endblock %}
 
 {% block content %}
 <div class="album-list">
@@ -83,7 +83,6 @@
     const ICON_PLAY = "{% static 'music_app/images/play_logo.png' %}";
     const ICON_PAUSE = "{% static 'music_app/images/pause_logo.png' %}";
 
-    // передаём пути в toggle.js
     STATIC_URLS.favOn = "{% static 'music_app/images/fav_2.jpg' %}";
     STATIC_URLS.favOff = "{% static 'music_app/images/fav_1.jpg' %}";
 </script>

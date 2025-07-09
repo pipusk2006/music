@@ -10,7 +10,7 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('', home_view, name='home'),
-    path('login/', login_view, name='login'),
+    path('account/login/', login_view, name='login'),
     path('registration/', registration_view, name='registration'),
     path('check_login/', check_login, name='check_login'),
     path('check_email/', check_email, name='check_email'),
